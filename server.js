@@ -64,7 +64,7 @@ let connector = new builder.ChatConnector({
     appPassword: process.env.MICROSOFT_APP_PASSWORD
 });
 let bot = new builder.UniversalBot(connector);
-server.post('/api/messages', connector.verifyBotFramework(), connector.listen());
+server.post('/api/messages', connector.listen());
 
 // Serve a static web page
 server.get(/.*/, restify.serveStatic({
