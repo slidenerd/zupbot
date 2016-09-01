@@ -1,0 +1,73 @@
+! sub forcast = forecast
+! sub weathr = weather
+! sub temp = temperature
+! array weather = weather|forecast|weather forecast|temperature
+! array weatherprepositions = in|at|for|of
+
+// star1 = text at the beginning
+// star2 = weather or forecast or weather forecast or temperature
+// star3 = in or at or for or of
+// star4 = the name of the place
+
++ * [is] [the] (@weather) (@weatherprepositions) *
+- <set zenotopic=weather><call>getWeather <star4></call> {topic=weather} 
+
+// star1 = text at the beginning
+// star2 = weather or forecast or weather forecast or temperature
+// star3 = in or at or for or of
+// star4 = the name of the place
+
++ * [is] [the] (@weather) (@weatherprepositions) my *
+- got it! your place right, where are you located {topic=weather} <set zenotopic=weather>
+
++ (@weather) (@weatherprepositions) *
+- <set zenotopic=weather><call>getWeather <star3></call> {topic=weather} 
+
+> topic weather
+
+    //any sentence inside the topic with the words rain or raining or rained
+    + [*] rain|raining|rained [*]
+    - Let me check and get back for rain
+
+    //any sentence inside the topic with the words snow or snowed or snowing
+    + [*] snow|snowed|snowing [*]
+    - Let me check and get back for snow
+
+    //any sentence inside the topic with the words wind or windy
+    + [*] wind|windy [*]
+    - Let me check and get back for wind
+ 
+    //any sentence inside the topic with the words hot or heat
+    + [*] hot|heat [*]
+    - Let me check and get back about the hot temperature
+
+    //any sentence inside the topic with the words cool or cold or freeze or freezing
+    + [*] cool|cold|freeze|freezing [*]
+    - Let me check and get back about the cold temperature
+
+    //if the person writes anything else inside the topic weather, take their reply out of this topic and let it be hanlded by the random topic
+    + *
+    - <@>{topic=random}
+
+< topic
+
++ what can * do about [a|the] weather *
+- Nothing can be done.
+
++ the weather *
+- Yeah! It is.
+
++ nice weather *
+- I'm happy as long as the power stays on.
+
++ when will it *
+- Are you asking when <get it> will <person>?
+- I don't know I didn't catch the weather today.
+- Check the five day forecast.
+- When nature makes it so.
+- When the elements combine to make it so.
+
++ how is the weather
+- where? can you tell me your location
+- i can tell you that provided you send me your location
+
