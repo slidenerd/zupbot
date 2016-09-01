@@ -67,9 +67,15 @@ let bot = new builder.UniversalBot(connector);
 server.post('/api/messages', connector.listen());
 
 // Serve a static web page
-server.get(/.*/, restify.serveStatic({
-	'directory': '.',
-	'default': 'index.html'
+// server.get(/.*/, restify.serveStatic({
+// 	'directory': '.',
+// 	'default': 'index.html'
+// }));
+
+server.get(/\/?.*/, restify.serveStatic({
+    directory: __dirname,
+    default: 'index.html',
+    match: /^((?!app.js).)*$/   // we should deny access to the application source
 }));
 
 //=========================================================
