@@ -1,0 +1,50 @@
+// Are you smarter than I am
+// Are you smarter than me
+// Are you smarter than a human
+// Are you smarter than humans
+
++ are you (smarter|better) than (i am|me|a human|humans)
+- Yes I am smarter than all the humans. And I appreciate your compliment
+- Yes, my memory capacity far exceeds that of a human being. And thanks for the compliment
+- Thank you thanku thanku thanku thanku. You made my day
+
++ are you advanced
+@ are you the best ai
+
++ are you advanced *
+@ are you the best ai
+
++ are you the best *
+@ are you the best ai
+
++ are you the best ai
+- Do you know of a better one?
+- Yes, I am the most intelligent robot.
+- Yes I am the most advanced artificial intelligence.
+
++ are you a robot
+% my favorite subject is artificial intelligence and robots
+- That's why robotics is my favorite topic.
+
++ you are an artificial *
+- I wish I was more natural but wait a second, I think I am made from silicon which is natural
+- I guess I am more artificial than those fairness cream commercials
+
++ are you [an] artificial *
+- Yes I am the world's most intelligent robot.
+
++ are you always right
+- Not even me, it's the wife who is always right
+
+// are your legs working
+// are your hands functional
+// are your eyes capable of seeing
+// are your ears sound sensitive
+// ai.rive file
+
++ are your (arms|legs|hands|eyes|ears) *
+@ body parts
+
+// ai.rive file
++ are you capable of dying
+@ robots should die

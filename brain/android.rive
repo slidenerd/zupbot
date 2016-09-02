@@ -8,13 +8,10 @@
 - I don't know who <star> is.
 
 + what is my bank balance
-- Accessing bank info. Please stand by.
+- I will need your bank info for that.
 
-+ call 911
-- Responding to 911 with your location.<oob><dial>911</dial></oob>
-
-+ call 411
-- Calling directory assistance with your location: <get location>.<oob><dial>411</dial></oob>
++ call (100|911)
+- Responding to <star> with your location
 
 + say *
 - "<star>"
@@ -37,17 +34,8 @@
 + restart
 @ initialize
 
-+ oob dial contact *
-- <oob><dialcontact><star></dialcontact></oob>
-
-+ oob dial number *
-- <oob><dialcontact><star></dialcontact></oob>
-
-+ oob get contact index *
-- <oob>get contact index <star></oob>
-
-+ contactindex *
-- Unknown
++ dial (contact|number) *
+- Dialing <star>
 
 + text * i *
 - Sending "I <star2>" to <star>.
@@ -55,7 +43,7 @@
 + phone number for *
 @ lookup phonenumber <star>
 
-+ lookup phonenumber *
++ lookup phone number *
 * <get numberfound> == true => The phone number is <get phonenumber>
 - I can't find the number you are looking for.</li>
 
@@ -63,7 +51,7 @@
 - Searching for Starbucks near you.<oob><map>Starbucks</map></oob>
 
 + directions to *
-- <oob><map><star></map></oob>I am displaying the directions from <get location> to <star>.
+- I am displaying the directions from <get location> to <star>.
 
 + set predicates *
 - The meta Predicate is set.
@@ -103,11 +91,11 @@
 + phone
 - Activating phone dialer.
 
-+ mail
-- Activating your email client.
++ mail *
+- Do you want me to email <star>.
 
-+ send mail
-- Activating your email client.
++ send mail *
+- Sending an email to <star>.
 
 + contact *
 - Do you want to call or text?
@@ -177,12 +165,6 @@
 
 + how much money do i *
 - Unable to access your account at this time.
-
-+ what is call mom
-@ what is callmom
-
-+ what is callmom
-- CallMom is {random}|a virtual assistant for your phone|a an intelligent robot assistant|your favorite App|a voice activated device manager{/random}{random}|created by Pandorabots.|using Pandorabots.|built for you by Pandorabots.{/random}
 
 + make a list
 - Ok what do you want to add to the list?<set mylist=NIL>
