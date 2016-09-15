@@ -1,7 +1,0 @@
-// All the rules in this document will be triggered from JS code
-
-//weather report triggered from js code
-+ weatherreport31eaf2426f3411e68b7786f30ca893d3
-- The temperature at <get placeName> is <get temperature><get degreesymbol>C and the humidity is <get humidity>%
-- Here's what I found about <get placeName>. The temperature is <get temperature><get degreesymbol>C and the humidity is <get humidity>%
-- Allright, lets have a look. The temperature at <get placeName> seems to be <get temperature><get degreesymbol>C and it is <get humidity>% humid
