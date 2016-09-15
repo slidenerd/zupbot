@@ -130,6 +130,7 @@ bot.dialog('/loadBrain', (session)=>{
         brain.engine.sortReplies();
         reply(session);
     }, (errorMessage, batchNumber)=>{
+        console.log(errorMessage);
         brainLoaded = false;
     });
     session.endDialog();
