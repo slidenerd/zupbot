@@ -1,0 +1,31 @@
+! version = 2.0
+! array weathersynonyms = weather|temperature|forecast|climate
+
++ [*] (@weathersynonyms) [*] (at|in|of|for) *
+- <call>getWeather <star3></call> {topic=weather}
+
++ [*] (@weathersynonyms) (seems|is|was|will be) [*]
+- Yea i feel that too
+- I bet my 2 cents on that along with you
+
++ [*] (@weathersynonyms) [*]
+- I feel the heat inside your pocket too but as long as you keep me out, I like the weather
+
+> topic weather
+
+	// The rules whose names start with js... are triggered from code
+	+ jsweather
+	* <get temperature> == null => Ooops, I couldn't get any weather report that clearly mentions the temperature.
+	* <get location> == null => I couldn't get any weather report for this place.
+	- The temperature at <get location> is <get temperature> degrees C and the humidity is <get humidity>%
+	- Here's what I found about <get location>. The temperature is <get temperature> degrees C and the humidity is <get humidity>%
+	- Allright, lets have a look. The temperature at <get location> seems to be <get temperature> degrees C and it is <get humidity>% humid
+
+	//Default messages by user will be handled by the random topic outside
+	+ *
+	- <@>{topic=random}
+
+< topic
+
+
+

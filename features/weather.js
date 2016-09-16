@@ -1,6 +1,8 @@
 'use strict';
 
-const request = require('request');
+const
+	errorCodes = require('../engine/error'),
+	request = require('request');
 
 function findWeather(lat, lon){
 	return new Promise((resolve, reject)=>{
@@ -16,7 +18,7 @@ function findWeather(lat, lon){
 			json: true
 		}, function(error, response, body){
 			if(error) {
-				reject(error);
+				reject({error: error, code: errorCodes.weatherLookupFailed});
 			} else {
 				let report = parseWeather(body);
 				resolve(report);
@@ -31,7 +33,7 @@ function parseWeather(json){
 		lon: (json.coord || {}).lon,
 		main: json.weather ? (json.weather[0] || {}).main : null,
 		description: json.weather? (json.weather[0] || {}).description : null,
-		temperature: (json.main || {}).temp.toFixed(0),
+		temperature: ((json.main || {}).temp || {}).toFixed(0),
 		pressure: (json.main || {}).pressure,
 		humidity: (json.main || {}).humidity,
 		seaLevel: (json.main || {}).sea_level,
@@ -42,8 +44,7 @@ function parseWeather(json){
 		dt: json.dt,
 		countryCode: (json.sys || {}).country,
 		sunrise: (json.sys || {}).sunrise,
-		sunset: (json.sys || {}).sunset,
-		placeName: json.name
+		sunset: (json.sys || {}).sunset
 	}
 }
 

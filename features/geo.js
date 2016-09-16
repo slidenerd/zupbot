@@ -1,5 +1,6 @@
 'use strict';
 const
+    errorCodes = require('../engine/error'),
     request =require('request');
 
 function getLocationDetails(location){
@@ -7,7 +8,7 @@ function getLocationDetails(location){
         request({
             url: 'https://devru-latitude-longitude-find-v1.p.mashape.com/latlon.php', //URL to hit
             qs: {
-                location: location
+                location: location ? location.trim() : location
             }, //Query string data
             headers: {
                 'X-Mashape-Key': 'ASgnW8JcttmshvHd0Hf1jUaS5fr9p1PcCxcjsnvgJ0EG00bIdt',
@@ -16,14 +17,14 @@ function getLocationDetails(location){
             json: true
         }, function(error, response, body){
             if(error) {
-                reject(error);
+                reject({error: error, code: errorCodes.cityLookupFailed});
             } else {
                 let cities = parseLocationDetails(body.Results);
                 if(cities && cities.length){
                     resolve(cities);
                 }
                 else{
-                    reject(null)
+                    reject({error: error, code: errorCodes.cityNotFound})
                 }
             }
         });

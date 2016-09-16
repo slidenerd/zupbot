@@ -122,15 +122,13 @@ bot.dialog('/initUser', (session)=>{
 })
 
 bot.dialog('/loadBrain', (session)=>{
-
-    //Refer https://github.com/aichaos/rivescript-js/blob/master/src/rivescript.coffee
     brain.engine.loadDirectory('./brain/', (batchNumber) => {
         brainLoaded = true;
         brain.initSubroutines(session);
         brain.engine.sortReplies();
         reply(session);
-    }, (errorMessage, batchNumber)=>{
-        console.log(errorMessage);
+    }, (error, batchNumber)=>{
+        console.log(error);
         brainLoaded = false;
     });
     session.endDialog();
