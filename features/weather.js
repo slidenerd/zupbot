@@ -2,7 +2,14 @@
 
 const
 	errorCodes = require('../engine/error'),
-	request = require('request');
+	geo = require('./geo'),
+	request = require('request'),
+	//The name of the subroutine that can find the weather
+	topicWeather = {key: 'topic', value: 'weather'},
+    weatherSubroutine = 'getWeather',
+
+	//The name of the rive trigger to invoke while displaying results
+    weatherTrigger = 'jsweather';
 
 function findWeather(lat, lon){
 	return new Promise((resolve, reject)=>{
@@ -62,8 +69,57 @@ function parseWeather(json){
 	
 }
 
+function initSubroutine(rs, session){
+  rs.setSubroutine(weatherSubroutine, (rs, args)=>{
+    return new rs.Promise((resolve, reject)=>{
+      geo.getLocationDetails(args[0])
+          .then((cities)=>{
+            return findWeather(cities[0].lat, cities[0].lon);
+          })
+          .then((weatherReport)=>{
+            //Save the user input location so that we can show it in the response
+            if(weatherReport){
+                weatherReport.location = args[0]
+                //Change the topic to weather
+                rs.setUservar(session.userData.user.id, topicWeather.key, topicWeather.value)
+                rs.setUservars(session.userData.user.id, weatherReport)
+                let reply = rs.reply(session.userData.user.id, weatherTrigger, this);
+                resolve(reply);
+            }
+            else{
+                reject(weatherReport);
+            }
+            
+          })
+          .catch((error)=>{
+            handleError(error, session)
+            reject(error);
+          })
+        });
+    });
+}
+
+function handleError(error, session){
+    if(error && error.code){
+        switch(error.code){
+            case errorCodes.cityNotFound:
+                session.send('Could not find the city');
+                break;
+            case errorCodes.cityLookupFailed:
+                session.send('network issue while searching city');
+                break;
+            case errorCodes.weatherLookupFailed:
+                session.send('Could not find weather');
+                break;
+            case errorCodes.weatherNotFound:
+                session.send('Could not find weather');
+                break;
+        }
+    }
+}
+
 let weather = {
-	findWeather: findWeather,
+	initSubroutine: initSubroutine
 }
 
 module.exports = weather;

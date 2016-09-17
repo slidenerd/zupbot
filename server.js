@@ -44,9 +44,7 @@ photos, videos, and location.
 const
     builder = require('./core/'), 
     restify = require('restify'),
-    brain = require('./engine/rules');
-
-let brainLoaded = false;
+    brain = require('./engine/brain');
 
 //=========================================================
 // Bot Setup
@@ -104,44 +102,24 @@ bot.dialog('/',
             next();
         }
     }, (session, results)=>{
-        if(!brainLoaded){
+        if(!brain.isBrainLoaded()){
             session.beginDialog('/loadBrain');
         }
         else{
-            reply(session);
+            brain.reply(session);
         }
     }]
 );
 
-bot.dialog('/initUser', (session)=>{
+bot.dialog('/initUser', initUser);
+
+function initUser(session){
     session.userData.user = {
         id: session.message.user.id,
         name: session.message.user.name
     }
     session.endDialog();
-})
-
-bot.dialog('/loadBrain', (session)=>{
-    brain.engine.loadDirectory('./brain/', (batchNumber) => {
-        brainLoaded = true;
-        brain.initSubroutines(session);
-        brain.engine.sortReplies();
-        reply(session);
-    }, (error, batchNumber)=>{
-        console.log(error);
-        brainLoaded = false;
-    });
-    session.endDialog();
-});
-
-
-function reply(session){
-    session.sendTyping();
-    brain.engine.replyAsync(session.userData.user.name, session.message.text, this)
-    .then(function(reply) {
-        session.send(reply);    
-    }).catch(function(error){
-        // something went wrong
-        console.log(error);
-    }); 
 }
+
+bot.dialog('/loadBrain', brain.loadBrain);
+

@@ -2,7 +2,7 @@
 ! array weathersynonyms = weather|temperature|forecast|climate
 
 + [*] (@weathersynonyms) [*] (at|in|of|for) *
-- <call>getWeather <star3></call> {topic=weather}
+- <call>getWeather {formal}<star3>{/formal}</call> {topic=weather}
 
 + [*] (@weathersynonyms) (seems|is|was|will be) [*]
 - Yea i feel that too
