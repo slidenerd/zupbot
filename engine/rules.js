@@ -30,12 +30,18 @@ function initWeatherSubroutine(session){
           })
           .then((weatherReport)=>{
             //Save the user input location so that we can show it in the response
-            weatherReport.location = args[0]
-            //Change the topic to weather
-            rs.setUservar(session.userData.user.id, topicWeather.key, topicWeather.value)
-            rs.setUservars(session.userData.user.id, weatherReport)
-            let reply = rs.reply(session.userData.user.id, weatherTrigger, this);
-            resolve(reply);
+            if(weatherReport){
+                weatherReport.location = args[0]
+                //Change the topic to weather
+                rs.setUservar(session.userData.user.id, topicWeather.key, topicWeather.value)
+                rs.setUservars(session.userData.user.id, weatherReport)
+                let reply = rs.reply(session.userData.user.id, weatherTrigger, this);
+                resolve(reply);
+            }
+            else{
+                reject(weatherReport);
+            }
+            
           })
           .catch((error)=>{
             handleError(error, session)
@@ -58,6 +64,7 @@ function handleError(error, session){
                 session.send('Could not find weather');
                 break;
             case errorCodes.weatherNotFound:
+                session.send('Could not find weather');
                 break;
         }
     }
