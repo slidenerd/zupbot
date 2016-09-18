@@ -1,6 +1,7 @@
 'use strict';
 
 const
+    deals = require('../features/finddeals'),
     RiveScript = require('rivescript'),
     weather = require('../features/weather');
 
@@ -36,11 +37,12 @@ let b = {
         b.brainLoaded = true;
         b.initSubroutines(session)
         b.rs.sortReplies(session);
-        b.reply(session);
+        b.fetchReply(session);
     },
 
     initSubroutines: function(session){
-        weather.initSubroutine(b.rs, session);
+        weather.init(b.rs, session);
+        deals.init(b.rs, session)
     },
 
     onLoadFailed: function(error, batchNumber, session){
@@ -49,7 +51,7 @@ let b = {
         session.send('Oops, my brain blew up, I am not sure why but I guess my creator knows.');
     },
 
-    reply: function(session){
+    fetchReply: function(session){
         session.sendTyping();
         b.rs.replyAsync(session.userData.user.name, session.message.text, b.this)
         .then(function(reply) {

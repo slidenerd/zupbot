@@ -11,6 +11,14 @@ const
 	//The name of the rive trigger to invoke while displaying results
     weatherTrigger = 'jsweather';
 
+function init(rs, session){
+	rs.setSubroutine(weatherSubroutine, (rs, args)=>{
+		return new rs.Promise((resolve, reject)=>{
+			report(resolve, reject, rs, args, session);
+		});
+	});
+}
+
 function findWeather(lat, lon){
 
 	let options = {
@@ -27,21 +35,21 @@ function findWeather(lat, lon){
 
 	return new Promise((resolve, reject)=>{
 		request(options, (error, response, body)=>{
-			findWeatherCallback(resolve, reject, error, response, body)
+			callback(resolve, reject, error, response, body)
 		});
 	});
 }
 
-function findWeatherCallback(resolve, reject, error, response, body){
-	if(error) {
-		reject({error: error, code: errorCodes.weatherLookupFailed});
-	} else {
-		let report = parseWeather(body);
+function callback(resolve, reject, error, response, body){
+	if(!error && response.statusCode == 200) {
+		let report = parse(body);
 		resolve(report);
+	} else {
+		reject({error: error, code: errorCodes.weatherLookupFailed});
 	}
 }
 
-function parseWeather(json){
+function parse(json){
 	if(json.coord 
 	&& json.coord.lat
 	&& json.coord.lon
@@ -76,15 +84,7 @@ function parseWeather(json){
 	
 }
 
-function initSubroutine(rs, session){
-	rs.setSubroutine(weatherSubroutine, (rs, args)=>{
-		return new rs.Promise((resolve, reject)=>{
-			reportWeather(resolve, reject, rs, args, session);
-		});
-	});
-}
-
-function reportWeather(resolve, reject, rs, args, session){
+function report(resolve, reject, rs, args, session){
 	geo.getLocationDetails(args[0])
 	.then((cities)=>{
 		return findWeather(cities[0].lat, cities[0].lon);
@@ -97,13 +97,14 @@ function reportWeather(resolve, reject, rs, args, session){
 			let userId = session.userData.user.id;
 			rs.setUservar(userId, topicWeather.key, topicWeather.value)
 			rs.setUservars(userId, weatherReport)
-			let reply = rs.reply(userId, weatherTrigger, this);
-			resolve(reply);
+			return rs.replyAsync(userId, weatherTrigger, this);
 		}
 		else{
 			reject(weatherReport);
 		}
-		
+	})
+	.then((reply)=>{
+		resolve(reply);
 	})
 	.catch((error)=>{
 		handleError(error, session)
@@ -132,7 +133,7 @@ function handleError(error, session){
 }
 
 let weather = {
-	initSubroutine: initSubroutine
+	init: init
 }
 
 module.exports = weather;

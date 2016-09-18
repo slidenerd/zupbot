@@ -106,7 +106,7 @@ bot.dialog('/',
             session.beginDialog('/loadBrain');
         }
         else{
-            brain.reply(session);
+            brain.fetchReply(session);
         }
     }]
 );
