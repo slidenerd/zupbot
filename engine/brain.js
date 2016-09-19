@@ -3,6 +3,7 @@
 const
     deals = require('../features/finddeals'),
     RiveScript = require('rivescript'),
+    recharge = require('../features/recharge'),
     weather = require('../features/weather');
 
 let b = {
@@ -42,7 +43,8 @@ let b = {
 
     initSubroutines: function(session){
         weather.init(b.rs, session);
-        deals.init(b.rs, session)
+        deals.init(b.rs, session);
+        recharge.init(b.rs, session);
     },
 
     onLoadFailed: function(error, batchNumber, session){

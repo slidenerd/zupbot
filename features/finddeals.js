@@ -76,16 +76,13 @@ function report(resolve, reject, rs, args, session){
             let attachments = []
             for(let deal of deals){
                 attachments.push(
-                    new builder.HeroCard(session)
+                    new builder.ThumbnailCard(session)
                     .title(deal.title)
                     .subtitle(deal.description)
                     .images([
                         builder.CardImage.create(session, deal.imageUrl)
-                            .tap(builder.CardAction.showImage(session, deal.imageUrl)),
                     ])
-                    .buttons([
-                        builder.CardAction.openUrl(session, deal.url, 'Flipkart')
-                    ])
+                    .tap(builder.CardAction.openUrl(session, deal.url))
                 )
             }
             let description = deals.map((deal)=>{

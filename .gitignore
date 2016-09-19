@@ -46,3 +46,6 @@ jspm_packages
 
 #Exclude vscode
 .vscode
+
+#Exclude jolo api documentation folder
+jolo api documentation
