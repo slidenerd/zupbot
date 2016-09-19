@@ -27,9 +27,9 @@ function findOperatorInfo(mobileNumber){
 			key: '258443870341474',
 			mob: mobileNumber,
 			type: 'json'
-		} //Query string data
-		// headers: {'Accept':'application/json'},
-		// json: true
+		}, //Query string data
+		headers: {'Accept':'application/json'},
+		json: true
 	}
 
 	return new Promise((resolve, reject)=>{
