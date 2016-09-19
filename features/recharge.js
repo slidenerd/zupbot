@@ -27,9 +27,9 @@ function findOperatorInfo(mobileNumber){
 			key: '258443870341474',
 			mob: mobileNumber,
 			type: 'json'
-		}, //Query string data
-		headers: {'Accept':'application/json'},
-		json: true
+		} //Query string data
+		// headers: {'Accept':'application/json'},
+		// json: true
 	}
 
 	return new Promise((resolve, reject)=>{
@@ -68,10 +68,11 @@ function report(resolve, reject, rs, args, session){
 		}
 	})
 	.then((reply)=>{
+		console.log(reply)
 		resolve(reply);
 	})
 	.catch((error)=>{
-	console.log(error)
+		console.log(error)
 		reject(error);
 	})
 }
@@ -79,12 +80,4 @@ function report(resolve, reject, rs, args, session){
 let recharge = {
 	init: init
 }
-
-findOperatorInfo('9167030966')
-.then((info)=>{
-	console.log(info);
-})
-.catch((error)=>{
-	console.log(error);
-})
 module.exports = recharge;
