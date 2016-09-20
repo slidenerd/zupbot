@@ -84,8 +84,10 @@ function report(resolve, reject, rs, args, session){
 		rs.setUservar(userId, topicRecharge.key, topicRecharge.value)
 		let operatorName = getOperatorName(json.operator_code);
 		let circleName = getCircleName(json.circle_code);
-		rs.setUservar(userId, 'operatorName', operatorName);
-		rs.setUservar(userId, 'circleName', circleName);
+		if(operatorName && circleName){
+			rs.setUservar(userId, 'operatorName', operatorName);
+			rs.setUservar(userId, 'circleName', circleName);
+		}
 		return rs.replyAsync(userId, rechargeTrigger, this);
 	})
 	.then((reply)=>{
@@ -100,50 +102,50 @@ function report(resolve, reject, rs, args, session){
 function getOperatorName(operatorCode){
 	let operatorName = null;
 	switch(operatorCode){
-		case 1:
+		case '1':
 			operatorName = 'Aircel';
 			break;
-		case 3:
-		operatorName = 'BSNL';
+		case '3':
+			operatorName = 'BSNL';
 			break;
-		case 5:
-		operatorName = 'Videocon';
+		case '5':
+			operatorName = 'Videocon';
 			break;	
-		case 6:
-		operatorName = 'MTNL Mumbai';
+		case '6':
+			operatorName = 'MTNL Mumbai';
 			break;
-		case 8:
-		operatorName = 'Idea';
+		case '8':
+			operatorName = 'Idea';
 			break;
-		case 9:
-		operatorName = 'Loop';
+		case '9':
+			operatorName = 'Loop';
 			break;
-		case 10:
-		operatorName = 'MTS';
+		case '10':
+			operatorName = 'MTS';
 			break;
-		case 12:
-		operatorName = 'Reliance CDMA';
+		case '12':
+			operatorName = 'Reliance CDMA';
 			break;
-		case 13:
-		operatorName = 'Reliance GSM';
+		case '13':
+			operatorName = 'Reliance GSM';
 			break;
-		case 17:
-		operatorName = 'Tata Docomo GSM or Virgin GSM or T24';
+		case '17':
+			operatorName = 'Tata Docomo GSM or Virgin GSM or T24';
 			break;
-		case 18:
-		operatorName = 'Tata Docomo CDMA or Virgin CDMA';
+		case '18':
+			operatorName = 'Tata Docomo CDMA or Virgin CDMA';
 			break;
-		case 19:
-		operatorName = 'Uninor';
+		case '19':
+			operatorName = 'Uninor';
 			break;
-		case 20:
-		operatorName = 'MTNL Delhi';
+		case '20':
+			operatorName = 'MTNL Delhi';
 			break;
-		case 22:
-		operatorName = 'Vodafone';
+		case '22':
+			operatorName = 'Vodafone';
 			break;
-		case 28:
-		operatorName = 'Airtel';
+		case '28':
+			operatorName = 'Airtel';
 			break;
 	}
 	return operatorName;
@@ -152,73 +154,73 @@ function getOperatorName(operatorCode){
 function getCircleName(circleCode){
 	let circleName = null;
 	switch(circleCode){
-		case 1:
+		case '1':
 			circleName = 'Delhi/NCR';
 			break;
-		case 2:
+		case '2':
 		circleName = 'Mumbai';
 			break;
-		case 3:
+		case '3':
 		circleName = 'Kolkata';
 			break;	
-		case 4:
+		case '4':
 		circleName = 'Maharashtra';
 			break;
-		case 5:
+		case '5':
 		circleName = 'Andhra Pradesh';
 			break;
-		case 6:
+		case '6':
 		circleName = 'Tamil Nadu';
 			break;
-		case 7:
+		case '7':
 		circleName = 'Karnataka';
 			break;
-		case 8:
+		case '8':
 		circleName = 'Gujarat';
 			break;
-		case 9:
+		case '9':
 		circleName = 'Uttar Pradesh (East)';
 			break;
-		case 10:
+		case '10':
 		circleName = 'Madhya Pradesh';
 			break;
-		case 11:
+		case '11':
 		circleName = 'Uttar Pradesh (West)';
 			break;
-		case 12:
+		case '12':
 		circleName = 'West Bengal';
 			break;
-		case 13:
+		case '13':
 		circleName = 'Rajasthan';
 			break;
-		case 14:
+		case '14':
 		circleName = 'Kerala';
 			break;
-		case 15:
+		case '15':
 		circleName = 'Punjab';
 			break;
-		case 16:
+		case '16':
 			circleName = 'Haryana';
 			break;
-		case 17:
+		case '17':
 			circleName = 'Bihar & Jharkhand';
 			break;
-		case 18:
+		case '18':
 			circleName = 'Orissa';
 			break;
-		case 19:
+		case '19':
 			circleName = 'Assam';
 			break;
-		case 20:
+		case '20':
 			circleName = 'North East';
 			break;
-		case 21:
+		case '21':
 			circleName = 'Himachal Pradesh';
 			break;
-		case 22:
+		case '22':
 			circleName = 'Jammu & Kashmir';
 			break;
-		case 23:
+		case '23':
 			circleName = 'Chennai';
 			break;
 	}
