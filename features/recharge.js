@@ -26,10 +26,10 @@ function findOperatorInfo(mobileNumber){
 			userid: 'slidenerd', 
 			key: '258443870341474',
 			mob: mobileNumber,
-			type: 'json'
+			type: 'text'
 		}, //Query string data
-		headers: {'Accept':'application/json'},
-		json: true
+		// headers: {'Accept':'application/json'},
+		// json: true
 	}
 
 	return new Promise((resolve, reject)=>{
@@ -42,9 +42,15 @@ function findOperatorInfo(mobileNumber){
 function callback(resolve, reject, error, response, body){
 	if(!error && response.statusCode == 200) {
 		let report = parse(body);
-		resolve(report);
+		if(report && report.status === 'FAILED'){
+			reject(report.error);
+		}
+		else{
+			resolve(report);
+		}
+		
 	} else {
-		reject({error: error, code: errorCodes.weatherLookupFailed});
+		reject(error);
 	}
 }
 
@@ -56,16 +62,12 @@ function report(resolve, reject, rs, args, session){
 	findOperatorInfo(args[0])
 	.then((json)=>{
 		//Save the user input location so that we can show it in the response
-		if(json){
-			//Change the topic to weather
-			let userId = session.userData.user.id;
-			rs.setUservar(userId, topicRecharge.key, topicRecharge.value)
-			rs.setUservars(userId, json)
-			return rs.replyAsync(userId, rechargeTrigger, this);
-		}
-		else{
-			reject(json);
-		}
+		//Change the topic to weather
+		console.log(json);
+		let userId = session.userData.user.id;
+		rs.setUservar(userId, topicRecharge.key, topicRecharge.value)
+		rs.setUservars(userId, json)
+		return rs.replyAsync(userId, rechargeTrigger, this);
 	})
 	.then((reply)=>{
 		console.log(reply)
