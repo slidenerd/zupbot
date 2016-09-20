@@ -39,6 +39,8 @@ function findOperatorInfo(mobileNumber){
 
 function callback(resolve, reject, error, response, body){
 	if(!error && response.statusCode == 200) {
+		console.log(body);
+		console.log('BEFORE PARSING');
 		let report = parse(body);
 		if(report.success === 'true'){
 			resolve(report);
@@ -65,7 +67,7 @@ function parse(json){
 			success: 'false',
 			status: json.status,
 			errorcode: json.errorcode
-		}
+		};
 	}
 	else{
 		return {success: 'false'};
