@@ -41,7 +41,7 @@ function callback(resolve, reject, error, response, body){
 	if(!error && response.statusCode == 200) {
 		console.log(body);
 		console.log('BEFORE PARSING');
-		let report = parse(body);
+		let report = parse(JSON.parse(body));
 		if(report.success === 'true'){
 			resolve(report);
 		}
