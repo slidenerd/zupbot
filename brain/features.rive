@@ -35,7 +35,9 @@
 > topic recharge
 	// The rules whose names start with js... are triggered from code
 	+ jsoperatorinfo
-	- Here's what I found <get recharge>
+	* <get operatorName> == undefined => Oops, I wasn't able to find your operator name. Would you like me to search again?
+	* <get circleName> == undefined => Oops, I wasn't able to find the state where your number is locatd. Would you like me to search again?
+	- Your phone belongs to <get operatorName> and you are based in <get circleName>
 
 	//Default messages by user will be handled by the random topic outside
 	+ *
