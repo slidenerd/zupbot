@@ -26,7 +26,7 @@ function findOperatorInfo(mobileNumber){
 			userid: 'slidenerd', 
 			key: '258443870341474',
 			mob: mobileNumber,
-			type: 'text'
+			type: 'json'
 		}, //Query string data
 		// headers: {'Accept':'application/json'},
 		// json: true
