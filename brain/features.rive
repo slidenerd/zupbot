@@ -2,10 +2,10 @@
 ! array weathersynonyms = weather|temperature|forecast|climate
 ! array dealsynonyms = coupon|coupons|discount|discounts|offers|deals
 
-+ [*] (@dealsynonyms) [*]
++ [*] (@dealsynonyms) [*]{weight=1000}
 - Sure let me take a look <call>getDealsOfTheDayFromFlipkart</call>{topic=deals}
 
-+ [*] (@weathersynonyms) [*] (at|in|of|for) *
++ [*] (@weathersynonyms) [*] (at|in|of|for) *{weight=1000}
 - Allright, chill out while I try to get the <star1> <star2> <star3> <call>getWeather {formal}<star3>{/formal}</call> {topic=weather}
 - Got, it, let me search the <star1> <star2> <star3> and get back to you <call>getWeather {formal}<star3>{/formal}</call> {topic=weather}
 - Yes boss, I am on it. Let's see what the weather gods say about the <star1> <star2> <star3> <call>getWeather {formal}<star3>{/formal}</call> {topic=weather} 
@@ -17,7 +17,7 @@
 + [*] (@weathersynonyms) [*]
 - I feel the heat inside your pocket too but as long as you keep me out, I like the weather
 
-+ [*] recharge [*] #
++ [*] recharge [*] # [*]{weight=1000}
 - Ofc, I take it you wanna recharge this number <star> <call>findOperatorInfo <star></call>
 
 //The name of this topic is being referred to from JS code
