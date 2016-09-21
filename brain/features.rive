@@ -3,7 +3,7 @@
 ! array dealsynonyms = coupon|coupons|discount|discounts|offers|deals
 
 + [*] (@dealsynonyms) [*]{weight=1000}
-- Sure let me take a look <call>getDealsOfTheDayFromFlipkart</call>{topic=deals}
+- <call>getDealsOfTheDayFromFlipkart</call>{topic=deals}
 
 + [*] (@weathersynonyms) [*] (at|in|of|for) *{weight=1000}
 - Allright, chill out while I try to get the <star1> <star2> <star3> <call>getWeather {formal}<star3>{/formal}</call> {topic=weather}
@@ -52,8 +52,8 @@
 	* <get temperature> == null => Ooops, I couldn't get any weather report that clearly mentions the temperature.
 	* <get location> == null => I couldn't get any weather report for this place.
 	- The temperature at <get location> is <get temperature> degrees C and the humidity is <get humidity>% 
-	- Here's what I found about <get location>. The temperature is <get temperature> degrees C and the humidity is <get humidity>% 
-	- Allright, lets have a look. The temperature at <get location> seems to be <get temperature> degrees C and it is <get humidity>% humid 
+	- The temperature is <get temperature> degrees C at <get location> and the humidity is <get humidity>% 
+	- The temperature at <get location> seems to be <get temperature> degrees C and it is <get humidity>% humid 
 
 	//Default messages by user will be handled by the random topic outside
 	+ *
