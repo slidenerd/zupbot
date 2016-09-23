@@ -42,9 +42,11 @@ photos, videos, and location.
 -----------------------------------------------------------------------------*/
 
 const
-    builder = require('./core/'), 
-    restify = require('restify'),
-    brain = require('./engine/brain');
+    builder = require('./core/'),
+    brain = require('./engine/brain'),
+    constants = require('./engine/constants'),
+    crud = require('./db/crud'),
+    restify = require('restify');
 
 //=========================================================
 // Bot Setup
@@ -53,27 +55,28 @@ const
 // Setup Restify Server
 let server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, function () {
-    console.log('%s listening to %s', server.name, server.url); 
+    console.log('%s listening to %s', server.name, server.url);
 });
-  
+let lastActive, timeout, userId;
+
 // Create chat bot
 let connector = new builder.ChatConnector({
     appId: process.env.MICROSOFT_APP_ID,
     appPassword: process.env.MICROSOFT_APP_PASSWORD
 });
 let bot = new builder.UniversalBot(connector);
-server.post('/api/messages', connector.listen());
+server.post(constants.ENDPOINT_MESSAGES, connector.listen());
 
 // Serve a static web page
 // server.get(/.*/, restify.serveStatic({
 // 	'directory': '.',
 // 	'default': 'index.html'
 // }));
-
-server.get(/\/?.*/, restify.serveStatic({
-    directory: __dirname,
-    default: 'index.html',
-    match: /^((?!app.js).)*$/   // we should deny access to the application source
+console.log(__dirname);
+server.get('/.*/', restify.serveStatic({
+    directory: __dirname + '/public',
+    default: constants.INDEX_HTML,
+    match: /^((?!server.js).)*$/   // we should deny access to the application source
 }));
 
 //=========================================================
@@ -93,19 +96,21 @@ bot.use(builder.Middleware.dialogVersion({ version: 1.0, resetCommand: /^reset/i
 //=========================================================
 // Bots Dialogs
 //=========================================================
-bot.dialog('/', 
-    [(session, args, next)=>{
-        if(!session.userData.user){
+bot.dialog('/',
+    [(session, args, next) => {
+        lastActive = new Date();
+        timeout = setInterval(intervalCallback, 5000);
+        if (!session.userData.user) {
             session.beginDialog('/initUser')
         }
-        else{
+        else {
             next();
         }
-    }, (session, results)=>{
-        if(!brain.isBrainLoaded()){
+    }, (session, results) => {
+        if (!brain.isBrainLoaded()) {
             session.beginDialog('/loadBrain');
         }
-        else{
+        else {
             brain.fetchReply(session);
         }
     }]
@@ -113,13 +118,39 @@ bot.dialog('/',
 
 bot.dialog('/initUser', initUser);
 
-function initUser(session){
+function initUser(session) {
     session.userData.user = {
         id: session.message.user.id,
         name: session.message.user.name
     }
+    let userObject = {
+        _id: session.userData.user.id,
+        name: session.userData.user.name
+    }
+    crud.upsert({ _id: session.userData.user.id }, userObject, (error, document) => {
+        if (error) {
+            console.error('error');
+        }
+        else {
+            console.log('document added ' + document);
+        }
+    })
+    userId = session.userData.user.id;
     session.endDialog();
 }
 
 bot.dialog('/loadBrain', brain.loadBrain);
 
+
+function intervalCallback() {
+    let currentTime = new Date();
+    if (lastActive) {
+        let timeDiff = Math.abs(currentTime.getTime() - lastActive.getTime());
+        if (timeDiff > 1000 * 30) {
+            if (userId) {
+                console.log(brain.getUservars(userId))
+            }
+            clearInterval(timeout);
+        }
+    }
+}

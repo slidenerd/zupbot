@@ -9,7 +9,7 @@ const
 let b = {
     brainPath: './brain/',
     brainLoaded: false,
-    rs: new RiveScript({debug: false, utf8: true, onDebug: this.onDebug}),
+    rs: new RiveScript({debug: true, utf8: true, onDebug: this.onDebug}),
     
     isBrainLoaded: function(){
         return b.brainLoaded;
@@ -31,7 +31,7 @@ let b = {
     },
 
     onDebug: function(message){
-
+        //print all the triggers on the console
     },
 
     onLoadSuccessful: function(session){
@@ -62,6 +62,10 @@ let b = {
             // something went wrong
             console.log(error);
         }); 
+    },
+
+    getUservars : function(userId){
+        return b.rs.getUservars(userId);
     }
 }
 

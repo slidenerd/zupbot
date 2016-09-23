@@ -85,10 +85,7 @@ function report(resolve, reject, rs, args, session){
                     .tap(builder.CardAction.openUrl(session, deal.url))
                 )
             }
-            let description = deals.map((deal)=>{
-                return deal.description;
-            }).join(',');
-            rs.setUservar(userId, 'description', description)
+            rs.setUservar(userId, 'count', deals.size)
             let msg = new builder.Message(session)
             .attachments(attachments);
             session.send(msg);

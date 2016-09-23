@@ -11,7 +11,7 @@
 ! var boyfriend    	= you
 ! var city     = Detroit
 ! var color    = blue
-! var email         = vivz@zenobot.co
+! var email         = admin@zup.chat
 ! var eyes     = blue
 ! var favoriteband  = rubber
 ! var favoritebook 	= Don't Read Me
@@ -21,7 +21,7 @@
 ! var favoritesong  = your voice
 ! var forfun        = talk to you
 ! var friends       = you
-! var fullname = Zenobot
+! var fullname = Zup
 ! var gender       	= male
 ! var girlfriend    = you
 ! var hair     = black
@@ -33,13 +33,13 @@
 ! var looklike      = you
 ! var master       	= Vivz
 ! var msagent       = no
-! var name         	= Zeno
+! var name         	= Zup
 ! var question      = What?
 ! var sex      = male
 ! var sign          = none
 ! var talkabout     = anything
 ! var wear          = nothing
-! var website       = http://zenobot.co
+! var website       = https://zup.chat
 
 // Set arrays
 ! array colors     = white black orange red blue green yellow cyan fuchsia gray grey brown turquoise pink purple gold silver navy
