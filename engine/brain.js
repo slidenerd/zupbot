@@ -1,70 +1,72 @@
 'use strict';
 
 const
-    deals = require('../features/finddeals'),
+    constants =require('./constants'), 
+    flipkart = require('../features/flipkart'),
     RiveScript = require('rivescript'),
     recharge = require('../features/recharge'),
+    utils = require('./utils'),
     weather = require('../features/weather');
 
 let b = {
     brainPath: './brain/',
     brainLoaded: false,
-    rs: new RiveScript({debug: true, utf8: true, onDebug: this.onDebug}),
-    
-    isBrainLoaded: function(){
+    rs: new RiveScript({ debug: false, utf8: true, onDebug: this.onDebug }),
+
+    isBrainLoaded: function () {
         return b.brainLoaded;
     },
 
-    setBrainLoaded: function(loaded){
+    setBrainLoaded: function (loaded) {
         b.brainLoaded = loaded;
     },
 
-    loadBrain: function(session){
-        b.rs.loadDirectory(b.brainPath, 
+    loadBrain: function (session) {
+        b.rs.loadDirectory(b.brainPath,
             (batchNumber) => {
                 b.onLoadSuccessful(session)
-                }, 
-            (error, batchNumber)=>{
-                b.onLoadFailed(error, batchNumber, session); 
+            },
+            (error, batchNumber) => {
+                b.onLoadFailed(error, batchNumber, session);
             });
         session.endDialog();
     },
 
-    onDebug: function(message){
+    onDebug: function (message) {
         //print all the triggers on the console
     },
 
-    onLoadSuccessful: function(session){
+    onLoadSuccessful: function (session) {
         b.brainLoaded = true;
         b.initSubroutines(session)
         b.rs.sortReplies(session);
         b.fetchReply(session);
     },
 
-    initSubroutines: function(session){
+    initSubroutines: function (session) {
         weather.init(b.rs, session);
-        deals.init(b.rs, session);
+        flipkart.init(b.rs, session);
         recharge.init(b.rs, session);
     },
 
-    onLoadFailed: function(error, batchNumber, session){
-        b.brainLoaded =false;
+    onLoadFailed: function (error, batchNumber, session) {
+        b.brainLoaded = false;
         console.log(error);
-        session.send('Oops, my brain blew up, I am not sure why but I guess my creator knows.');
+        session.send(utils.sendRandomMessage(constants.ERROR_LOADING_BRAIN));
     },
 
-    fetchReply: function(session){
+    fetchReply: function (session) {
         session.sendTyping();
         b.rs.replyAsync(session.userData.user.name, session.message.text, b.this)
-        .then(function(reply) {
-            session.send(reply);    
-        }).catch(function(error){
-            // something went wrong
-            console.log(error);
-        }); 
+            .then(function (reply) {
+                session.send(reply);
+            }).catch(function (error) {
+                // something went wrong
+                console.log(error);
+            });
     },
 
-    getUservars : function(userId){
+    getUservars: function (userId) {
         return b.rs.getUservars(userId);
     }
 }

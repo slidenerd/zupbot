@@ -57,7 +57,6 @@ let server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, function () {
     console.log('%s listening to %s', server.name, server.url);
 });
-let lastActive, timeout, userId;
 
 // Create chat bot
 let connector = new builder.ChatConnector({
@@ -74,6 +73,8 @@ server.post(constants.ENDPOINT_MESSAGES, connector.listen());
 // }));
 console.log(__dirname);
 server.get('/.*/', restify.serveStatic({
+
+    //Ensure that people can only access the files within the public directory and none of the protected server files
     directory: __dirname + '/public',
     default: constants.INDEX_HTML,
     match: /^((?!server.js).)*$/   // we should deny access to the application source
@@ -96,38 +97,78 @@ bot.use(builder.Middleware.dialogVersion({ version: 1.0, resetCommand: /^reset/i
 //=========================================================
 // Bots Dialogs
 //=========================================================
-bot.dialog('/',
-    [(session, args, next) => {
-        lastActive = new Date();
-        timeout = setInterval(intervalCallback, 5000);
-        if (!session.userData.user) {
-            session.beginDialog('/initUser')
+bot.dialog('/', [firstWaterfallStep, secondWaterfallStep]);
+
+function firstWaterfallStep(session, args, next) {
+
+    //each time the user chats, mark their last active time.
+    let lastActive = new Date();
+
+    //create a timeout to persist their data after they have been inactive for a while
+    let timeout = setInterval(() => {
+
+        //get the current time when this callback is triggered
+        let currentTime = new Date();
+
+        //Find the difference between the time user last had a conversation with our bot
+        //And the time this callback was triggered
+        let difference = Math.abs(currentTime.getTime() - lastActive.getTime());
+
+        //If the time difference is greater than the amount of delay
+        //Get all the information discussed with the user and update the database
+        if (difference > constants.PERSIST_DATA_AFTER) {
+
+            //If we have a valid user id at this point, we ll get the user information
+            let userId = session.userData.user._id;
+            if (userId) {
+                console.log(brain.getUservars(userId))
+            }
+
+            //Remove the interval to avoid triggering it till the next interaction
+            clearInterval(timeout);
         }
-        else {
-            next();
-        }
-    }, (session, results) => {
-        if (!brain.isBrainLoaded()) {
-            session.beginDialog('/loadBrain');
-        }
-        else {
-            brain.fetchReply(session);
-        }
-    }]
-);
+    }, constants.INTERVAL_FREQUENCY);
+
+    //If we dont have a user attached to our session, time to create one
+    if (!session.userData.user) {
+        session.beginDialog('/initUser')
+    }
+    else {
+        next();
+    }
+}
+
+function secondWaterfallStep(session, results) {
+
+    //if our rive triggers have not been loaded, load them into memory
+    if (!brain.isBrainLoaded()) {
+        session.beginDialog('/loadBrain');
+    }
+    else {
+        brain.fetchReply(session);
+    }
+}
 
 bot.dialog('/initUser', initUser);
 
 function initUser(session) {
-    session.userData.user = {
-        id: session.message.user.id,
+
+    //Create a new user object to be stored in the mongo db database
+    //Add an _id that acts as the primary key
+    //Add the name of our user
+    let userObject = {
+        _id: session.message.user.id,
         name: session.message.user.name
     }
-    let userObject = {
-        _id: session.userData.user.id,
-        name: session.userData.user.name
-    }
-    crud.upsert({ _id: session.userData.user.id }, userObject, (error, document) => {
+
+    //Add this object to be tracked across our session
+    session.userData.user = userObject;
+
+    //Query to check if this user ID already exists in the mongo db database
+    let query = { _id: userObject._id }
+
+    //If the userID exists, modify it, else insert a fresh user object into the database
+    crud.upsert(query, userObject, (error, document) => {
         if (error) {
             console.error('error');
         }
@@ -135,22 +176,7 @@ function initUser(session) {
             console.log('document added ' + document);
         }
     })
-    userId = session.userData.user.id;
     session.endDialog();
 }
 
 bot.dialog('/loadBrain', brain.loadBrain);
-
-
-function intervalCallback() {
-    let currentTime = new Date();
-    if (lastActive) {
-        let timeDiff = Math.abs(currentTime.getTime() - lastActive.getTime());
-        if (timeDiff > 1000 * 30) {
-            if (userId) {
-                console.log(brain.getUservars(userId))
-            }
-            clearInterval(timeout);
-        }
-    }
-}

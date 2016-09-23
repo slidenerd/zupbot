@@ -1,33 +1,34 @@
 'use strict';
 const
+    constants = require('../engine/constants'),
     errorCodes = require('../engine/error'),
     request =require('request');
 
-function getLocationDetails(location){
+function reverseGeocode(location){
 
     let options = {
-        url: 'https://devru-latitude-longitude-find-v1.p.mashape.com/latlon.php', //URL to hit
+        url: constants.ENDPOINT_GEO_URI, //URL to hit
         qs: {
             location: location ? location.trim() : location
         }, //Query string data
         headers: {
-            'X-Mashape-Key': 'ASgnW8JcttmshvHd0Hf1jUaS5fr9p1PcCxcjsnvgJ0EG00bIdt',
+            'X-Mashape-Key': constants.GEO_API_KEY,
             'Accept':'application/json'
         },
         json: true
     }
     return new Promise((resolve, reject)=>{
         request(options, (error, response, body)=>{
-            getLocationDetailsCallback(resolve, reject, error, response, body);
+            callback(resolve, reject, error, response, body);
         });
     });
 }
 
-function getLocationDetailsCallback(resolve, reject, error, response, body){
+function callback(resolve, reject, error, response, body){
     if(error) {
         reject({error: error, code: errorCodes.cityLookupFailed});
     } else {
-        let cities = parseLocationDetails(body.Results);
+        let cities = parse(body.Results);
         if(cities && cities.length){
             resolve(cities);
         }
@@ -37,7 +38,7 @@ function getLocationDetailsCallback(resolve, reject, error, response, body){
     }
 }
 
-function parseLocationDetails(response){
+function parse(response){
     let cities = [];
     for(let city of response){
         cities.push({
@@ -52,7 +53,7 @@ function parseLocationDetails(response){
 }
 
 let geo = {
-    getLocationDetails: getLocationDetails,
+    reverseGeocode: reverseGeocode,
 }
 
 module.exports = geo;

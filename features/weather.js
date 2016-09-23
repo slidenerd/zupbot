@@ -1,15 +1,15 @@
 'use strict';
 
 const
+	constants = require('../engine/constants'),
 	errorCodes = require('../engine/error'),
 	geo = require('./geo'),
 	request = require('request'),
 	//The name of the subroutine that can find the weather
-	topicWeather = {key: 'topic', value: 'weather'},
-    weatherSubroutine = 'getWeather',
+    weatherSubroutine = findWeather.name,
 
 	//The name of the rive trigger to invoke while displaying results
-    weatherTrigger = 'jsweather';
+    weatherTrigger = constants.JS_TRIGGER_WEATHER;
 
 function init(rs, session){
 	rs.setSubroutine(weatherSubroutine, (rs, args)=>{
@@ -22,12 +22,12 @@ function init(rs, session){
 function findWeather(lat, lon){
 
 	let options = {
-		url: 'http://api.openweathermap.org/data/2.5/weather', //URL to hit
+		url: constants.ENDPOINT_OPEN_WEATHER_MAP, //URL to hit
 		qs: {
 			lat: lat, 
 			lon: lon,
-			units: 'metric',
-			appid: '353263113c293de88e214ced88de05a7'
+			units: constants.UNITS_METRIC,
+			appid: constants.OPEN_WEATHER_MAP_API_KEY
 		}, //Query string data
 		headers: {'Accept':'application/json'},
 		json: true
@@ -85,7 +85,7 @@ function parse(json){
 }
 
 function report(resolve, reject, rs, args, session){
-	geo.getLocationDetails(args[0])
+	geo.reverseGeocode(args[0])
 	.then((cities)=>{
 		return findWeather(cities[0].lat, cities[0].lon);
 	})
@@ -94,8 +94,8 @@ function report(resolve, reject, rs, args, session){
 		if(weatherReport){
 			weatherReport.location = args[0]
 			//Change the topic to weather
-			let userId = session.userData.user.id;
-			rs.setUservar(userId, topicWeather.key, topicWeather.value)
+			let userId = session.userData.user._id;
+			rs.setUservar(userId, constants.TOPIC, constants.TOPIC_WEATHER)
 			rs.setUservars(userId, weatherReport)
 			return rs.replyAsync(userId, weatherTrigger, this);
 		}
@@ -111,7 +111,6 @@ function report(resolve, reject, rs, args, session){
 		reject(error);
 	})
 }
-
 
 function handleError(error, session){
     if(error && error.code){
