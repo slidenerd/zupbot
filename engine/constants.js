@@ -1,6 +1,8 @@
 'use strict';
 
 let constants = {
+    APP_ID: process.env.MICROSOFT_APP_ID || '92762e6c-5017-4a0c-a0bc-2194d94ca9dd',
+    APP_PASSWORD: process.env.MICROSOFT_APP_PASSWORD || 'KgRnrjrxbEQtZHRghbATP7c',
     ENDPOINT_MESSAGES: '/api/messages',
     ENDPOINT_GEO_URI: 'https://devru-latitude-longitude-find-v1.p.mashape.com/latlon.php',
     ENDPOINT_FLIPKART_DEALS: 'https://affiliate-api.flipkart.net/affiliate/offers/v1/dotd/json',
