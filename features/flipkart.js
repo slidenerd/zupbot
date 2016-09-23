@@ -84,14 +84,13 @@ function report(resolve, reject, rs, args, session) {
                 //Build cards containing all the data
                 for (let deal of deals) {
                     attachments.push(
-                        new builder.ThumbnailCard(session)
+                        new builder.HeroCard(session)
                             .title(deal.title)
                             .subtitle(deal.description)
                             .images([
                                 builder.CardImage.create(session, deal.imageUrl)
                             ])
-                            .tap(builder.CardAction.openUrl(session, deal.url))
-                    )
+                            .tap(builder.CardAction.openUrl(session, deal.url)))
                 }
                 rs.setUservar(userId, constants.VAR_FLIPKART_RESULTS_SIZE, deals.length)
                 let msg = new builder.Message(session)
