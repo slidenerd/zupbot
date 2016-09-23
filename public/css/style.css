@@ -12,6 +12,7 @@ Body
 
 html,
 body {
+  width: 100%;
   height: 100%;
 }
 
@@ -24,6 +25,110 @@ body {
   line-height: 1.3;
   overflow: hidden;
 }
+
+.animate, header .content nav ul li a, header .handle .bars .bar {
+  -webkit-transition: all 0.25s;
+  transition: all 0.25s;
+}
+
+.animate-ease, header .content {
+  -webkit-transition: all 0.25s cubic-bezier(0.31, -0.105, 0.43, 1.59);
+  transition: all 0.25s cubic-bezier(0.31, -0.105, 0.43, 1.59);
+}
+
+.container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 15px;
+  position: relative;
+}
+
+
+header .content {
+  background-color: #fff;
+  width: 100%;
+  height: 90px;
+  line-height: 80px;
+  padding-top: 10px;
+  position: absolute;
+  top: -90px;
+  left: 0;
+  z-index: 5;
+}
+
+header .content nav ul {
+  list-style-type: none;
+  font-size: 0;
+}
+
+header .content nav ul li {
+  display: inline-block;
+  margin-right: 25px;
+}
+header .content nav ul li a {
+  font-weight: 600;
+  font-size: 16px;
+  color: #666;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+header .content nav ul li a:hover {
+  color: #2980b9;
+}
+header .handle {
+  background-color: #fff;
+  width: 80px;
+  height: 80px;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+}
+header .handle .bars {
+  width: 40px;
+  height: 26px;
+  position: absolute;
+  top: 27px;
+  left: 20px;
+}
+header .handle .bars .bar {
+  background-color: #666;
+  width: 100%;
+  height: 2px;
+  position: absolute;
+  left: 0;
+}
+header .handle .bars .bar:nth-child(1) {
+  top: 0;
+}
+header .handle .bars .bar:nth-child(2) {
+  top: 12px;
+}
+header .handle .bars .bar:nth-child(3) {
+  bottom: 0;
+}
+header .handle:hover .bars .bar {
+  opacity: .7;
+}
+header.expanded .content {
+  top: -10px;
+}
+header.expanded .handle .bars .bar:nth-child(1) {
+  top: 12px;
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
+}
+header.expanded .handle .bars .bar:nth-child(2) {
+  opacity: 0;
+}
+header.expanded .handle .bars .bar:nth-child(3) {
+  bottom: 12px;
+  -webkit-transform: rotate(-45deg);
+          transform: rotate(-45deg);
+}
+
 
 .bg {
   width: 100%;
@@ -47,9 +152,9 @@ Chat
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
-  width: 300px;
+  width: 360px;
   height: 80vh;
-  max-height: 500px;
+  max-height: 600px;
   z-index: 2;
   overflow: hidden;
   box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
@@ -296,6 +401,7 @@ Message Box
   margin: 0;
   padding-right: 20px;
   width: 265px;
+  overflow: hidden;
 }
 .message-box textarea:focus:-webkit-placeholder {
   color: transparent;
