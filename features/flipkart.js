@@ -11,10 +11,10 @@ const
 /**
  * Main entry point in this file
  */
-function init(rs, session) {
+function init(rs, userId, session) {
     rs.setSubroutine(subroutineName, (rs, args) => {
         return new rs.Promise((resolve, reject) => {
-            report(resolve, reject, rs, args, session);
+            report(resolve, reject, rs, args, userId, session);
         });
     });
 }
@@ -70,16 +70,10 @@ function parse(json) {
 }
 
 //TODO detect source if its skype or facebook and render different content for each
-function report(resolve, reject, rs, args, session) {
+function report(resolve, reject, rs, args, userId, session) {
     getDealsOfTheDayFromFlipkart()
         .then((deals) => {
-            //Get the user id
-            let userId = session.userData.user._id;
-            console.log(userId);
             if (deals) {
-
-                //Change the topic to deals
-                rs.setUservar(userId, constants.TOPIC, constants.TOPIC_DEALS)
                 let attachments = []
 
                 //Build cards containing all the data

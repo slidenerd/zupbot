@@ -1,7 +1,7 @@
 'use strict';
 
 const
-    constants =require('./constants'), 
+    constants = require('./constants'),
     flipkart = require('../features/flipkart'),
     RiveScript = require('rivescript'),
     recharge = require('../features/recharge'),
@@ -21,10 +21,10 @@ let b = {
         b.brainLoaded = loaded;
     },
 
-    loadBrain: function (session) {
+    loadBrain: function (userId, session) {
         b.rs.loadDirectory(b.brainPath,
             (batchNumber) => {
-                b.onLoadSuccessful(session)
+                b.onLoadSuccessful(userId, session)
             },
             (error, batchNumber) => {
                 b.onLoadFailed(error, batchNumber, session);
@@ -36,17 +36,17 @@ let b = {
         //print all the triggers on the console
     },
 
-    onLoadSuccessful: function (session) {
+    onLoadSuccessful: function (userId, session) {
         b.brainLoaded = true;
-        b.initSubroutines(session)
-        b.rs.sortReplies(session);
-        b.fetchReply(session);
+        b.initSubroutines(userId, session)
+        b.rs.sortReplies();
+        b.fetchReply(userId, session);
     },
 
-    initSubroutines: function (session) {
-        weather.init(b.rs, session);
-        flipkart.init(b.rs, session);
-        recharge.init(b.rs, session);
+    initSubroutines: function (userId, session) {
+        weather.init(b.rs, userId, session);
+        flipkart.init(b.rs, userId, session);
+        recharge.init(b.rs, userId, session);
     },
 
     onLoadFailed: function (error, batchNumber, session) {
@@ -55,9 +55,9 @@ let b = {
         session.send(utils.sendRandomMessage(constants.ERROR_LOADING_BRAIN));
     },
 
-    fetchReply: function (session) {
+    fetchReply: function (userId, session) {
         session.sendTyping();
-        b.rs.replyAsync(session.userData.user.name, session.message.text, b.this)
+        b.rs.replyAsync(userId, session.message.text, b.this)
             .then(function (reply) {
                 session.send(reply);
             }).catch(function (error) {

@@ -3,17 +3,15 @@
 const
 	errorCodes = require('../engine/error'),
 	request = require('request'),
-	//The name of the subroutine that can find the weather
-	topicRecharge = {key: 'topic', value: 'recharge'},
     rechargeSubroutine = 'findOperatorInfo',
 
 	//The name of the rive trigger to invoke while displaying results
     rechargeTrigger = 'jsoperatorinfo';
 
-function init(rs, session){
+function init(rs, userId, session){
 	rs.setSubroutine(rechargeSubroutine, (rs, args)=>{
 		return new rs.Promise((resolve, reject)=>{
-			report(resolve, reject, rs, args, session);
+			report(resolve, reject, rs, args, userId, session);
 		});
 	});
 }
@@ -74,14 +72,10 @@ function parse(json){
 	}
 }
 
-function report(resolve, reject, rs, args, session){
+function report(resolve, reject, rs, args, userId, session){
 	findOperatorInfo(args[0])
 	.then((json)=>{
-		//Save the user input location so that we can show it in the response
-		//Change the topic to weather
 		console.log(json);
-		let userId = session.userData.user.id;
-		rs.setUservar(userId, topicRecharge.key, topicRecharge.value)
 		let operatorName = getOperatorName(json.operator_code);
 		let circleName = getCircleName(json.circle_code);
 		if(operatorName && circleName){

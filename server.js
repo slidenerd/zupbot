@@ -145,7 +145,8 @@ function secondWaterfallStep(session, results) {
         session.beginDialog('/loadBrain');
     }
     else {
-        brain.fetchReply(session);
+        let userId = session.userData.user._id;
+        brain.fetchReply(userId, session);
     }
 }
 
@@ -154,7 +155,7 @@ bot.dialog('/initUser', initUser);
 function initUser(session) {
     let userObject = getUserObject(session);
     //We dont want a person whose name is null, simple as that
-    if (userObject._id && userObject.name) {
+    if (userObject._id && userObject.userName) {
         //Add this object to be tracked across our session
         session.userData.user = userObject;
         //Query to check if this user ID already exists in the mongo db database
@@ -181,20 +182,17 @@ function getUserObject(session) {
     let address = session.message.address;
     return {
         _id: user.id,
-        name: user.name,
-        address: {
-            channelId: address.channelId,
-            conversation: {
-                isGroup: address.conversation.isGroup,
-                id: address.conversation.id,
-                name: address.conversation.name
-            },
-            bot: {
-                id: address.bot.id,
-                name: address.bot.name
-            }
-        }
+        userName: user.name,
+        botId: address.bot.id,
+        botName: address.bot.name,
+        channelId: address.channelId,
+        convId: address.conversation.id,
+        convName: address.conversation.name,
+        convIsGroup: address.conversation.isGroup
     }
 }
 
-bot.dialog('/loadBrain', brain.loadBrain);
+bot.dialog('/loadBrain', (session)=>{
+    let userId = session.userData.user._id;
+    brain.loadBrain(userId, session);
+});

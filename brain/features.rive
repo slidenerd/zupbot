@@ -89,6 +89,13 @@
 	- The temperature is <get temperature> degrees C at <get location> and the humidity is <get humidity>% 
 	- The temperature at <get location> seems to be <get temperature> degrees C and it is <get humidity>% humid 
 
+	+ [*] humidity [*]
+	- It is <get humidity>% humid at <get location>
+	- The humidity is <get humidity>% at <get location>
+
+	+ [*] pressure [*]
+	- The pressure seems to be <get pressure> at <get location>
+
 	//Default messages by user will be handled by the random topic outside
 	+ *
 	- <@>{topic=random}

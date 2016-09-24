@@ -11,10 +11,10 @@ const
 	//The name of the rive trigger to invoke while displaying results
     weatherTrigger = constants.JS_TRIGGER_WEATHER;
 
-function init(rs, session){
+function init(rs, userId, session){
 	rs.setSubroutine(weatherSubroutine, (rs, args)=>{
 		return new rs.Promise((resolve, reject)=>{
-			report(resolve, reject, rs, args, session);
+			report(resolve, reject, rs, args, userId, session);
 		});
 	});
 }
@@ -84,7 +84,7 @@ function parse(json){
 	
 }
 
-function report(resolve, reject, rs, args, session){
+function report(resolve, reject, rs, args, userId, session){
 	geo.reverseGeocode(args[0])
 	.then((cities)=>{
 		return findWeather(cities[0].lat, cities[0].lon);
@@ -93,9 +93,6 @@ function report(resolve, reject, rs, args, session){
 		//Save the user input location so that we can show it in the response
 		if(weatherReport){
 			weatherReport.location = args[0]
-			//Change the topic to weather
-			let userId = session.userData.user._id;
-			rs.setUservar(userId, constants.TOPIC, constants.TOPIC_WEATHER)
 			rs.setUservars(userId, weatherReport)
 			return rs.replyAsync(userId, weatherTrigger, this);
 		}

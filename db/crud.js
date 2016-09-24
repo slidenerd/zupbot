@@ -24,7 +24,6 @@ let crud = {
 
 // crud.remove({ _id: '2c1c7fa3' }, () => {
 //   console.log('done')
-
 // })
 
 module.exports = crud;
