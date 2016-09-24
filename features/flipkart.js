@@ -85,12 +85,16 @@ function report(resolve, reject, rs, args, session) {
                 for (let deal of deals) {
                     attachments.push(
                         new builder.HeroCard(session)
-                            .title(deal.title)
-                            .subtitle(deal.description)
-                            .images([
-                                builder.CardImage.create(session, deal.imageUrl)
-                            ])
-                            .tap(builder.CardAction.openUrl(session, deal.url)))
+                    .title(deal.title)
+                    .subtitle(deal.subtitle)
+                    .images([
+                        builder.CardImage.create(session, deal.imageUrl)
+                            .tap(builder.CardAction.openUrl(session, deal.url)),
+                    ])
+                    .buttons([
+                        builder.CardAction.openUrl(session, deal.url, "View On Flipkart")
+                    ])
+                    )
                 }
                 rs.setUservar(userId, constants.VAR_FLIPKART_RESULTS_SIZE, deals.length)
                 let msg = new builder.Message(session)

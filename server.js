@@ -161,21 +161,24 @@ function initUser(session) {
         name: session.message.user.name
     }
 
-    //Add this object to be tracked across our session
-    session.userData.user = userObject;
+    //We dont want a person whose name is null, simple as that
+    if (userObject._id && userObject.name) {
+        //Add this object to be tracked across our session
+        session.userData.user = userObject;
 
-    //Query to check if this user ID already exists in the mongo db database
-    let query = { _id: userObject._id }
+        //Query to check if this user ID already exists in the mongo db database
+        let query = { _id: userObject._id }
 
-    //If the userID exists, modify it, else insert a fresh user object into the database
-    crud.upsert(query, userObject, (error, document) => {
-        if (error) {
-            console.error('error');
-        }
-        else {
-            console.log('document added ' + document);
-        }
-    })
+        //If the userID exists, modify it, else insert a fresh user object into the database
+        crud.upsert(query, userObject, (error, document) => {
+            if (error) {
+                console.error('error');
+            }
+            else {
+                console.log('document added ' + document);
+            }
+        })
+    }
     session.endDialog();
 }
 

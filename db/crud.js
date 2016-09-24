@@ -4,11 +4,11 @@
 let User = require('./user');
 
 let crud = {
-  upsert : function(query, document, callback){
-    User.findOneAndUpdate(query, document, {upsert: true, new: true}, callback);
+  upsert: function (query, document, callback) {
+    User.findOneAndUpdate(query, document, { upsert: true, new: true }, callback);
   },
 
-  remove: function(query, callback){
+  remove: function (query, callback) {
     User.remove(query, callback);
   }
 }
@@ -20,6 +20,11 @@ let crud = {
 //   else{
 //     console.log(document);
 //   }
+// })
+
+// crud.remove({ _id: '2c1c7fa3' }, () => {
+//   console.log('done')
+
 // })
 
 module.exports = crud;
