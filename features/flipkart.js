@@ -69,6 +69,7 @@ function parse(json) {
     return deals;
 }
 
+//TODO detect source if its skype or facebook and render different content for each
 function report(resolve, reject, rs, args, session) {
     getDealsOfTheDayFromFlipkart()
         .then((deals) => {

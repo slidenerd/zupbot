@@ -9,6 +9,18 @@ let userSchema = new Schema({
     _id: { type: String, required: true, unique: true },
     name: { type: String, required: true },
     email: { type: String },
+    address: {
+        channelId: {type: String},
+        conversation: {
+            isGroup: {type: String},
+            id: {type: String},
+            name: {type: String}
+        },
+        bot: {
+            id: {type: String},
+            name: {type: String}
+        }
+    },
     lat: { type: Number },
     lon: { type: Number },
     createdAt: Date,

@@ -153,22 +153,13 @@ bot.dialog('/initUser', initUser);
 
 function initUser(session) {
 
-    //Create a new user object to be stored in the mongo db database
-    //Add an _id that acts as the primary key
-    //Add the name of our user
-    let userObject = {
-        _id: session.message.user.id,
-        name: session.message.user.name
-    }
-
     //We dont want a person whose name is null, simple as that
     if (userObject._id && userObject.name) {
         //Add this object to be tracked across our session
+        let userObject = getUserObject(session);
         session.userData.user = userObject;
-
         //Query to check if this user ID already exists in the mongo db database
         let query = { _id: userObject._id }
-
         //If the userID exists, modify it, else insert a fresh user object into the database
         crud.upsert(query, userObject, (error, document) => {
             if (error) {
@@ -180,6 +171,31 @@ function initUser(session) {
         })
     }
     session.endDialog();
+}
+
+function getUserObject(session) {
+    //Create a new user object to be stored in the mongo db database
+    //Add an _id that acts as the primary key
+    //Add the name of our user
+
+    let user = session.message.user;
+    let address = session.message.address;
+    return {
+        _id: user.id,
+        name: user.name,
+        address: {
+            channelId: address.channelId,
+            conversation: {
+                isGroup: address.conversation.isGroup,
+                id: address.conversation.id,
+                name: address.conversation.name
+            },
+            bot: {
+                id: address.bot.id,
+                name: address.bot.name
+            }
+        }
+    }
 }
 
 bot.dialog('/loadBrain', brain.loadBrain);
