@@ -152,11 +152,10 @@ function secondWaterfallStep(session, results) {
 bot.dialog('/initUser', initUser);
 
 function initUser(session) {
-
+    let userObject = getUserObject(session);
     //We dont want a person whose name is null, simple as that
     if (userObject._id && userObject.name) {
         //Add this object to be tracked across our session
-        let userObject = getUserObject(session);
         session.userData.user = userObject;
         //Query to check if this user ID already exists in the mongo db database
         let query = { _id: userObject._id }
