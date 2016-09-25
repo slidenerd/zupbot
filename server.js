@@ -136,6 +136,7 @@ function firstWaterfallStep(session, args, next) {
 
     console.log('attachments from ' + session.message.address.channelId);
     console.log(session.message.attachments);
+    console.log(session.message.entities);
 
     //If we dont have a user attached to our session, time to create one
     if (!session.userData.user) {
