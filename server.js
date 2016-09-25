@@ -144,7 +144,10 @@ function firstWaterfallStep(session, args, next) {
         next();
     }
 
-    console.log('we finally came here')
+    let channelId = session.message.address.channelId
+    let attachements = session.message.attachments;
+    let entities = session.message.entities;
+    handleAttachmentForPlatform(channelId, attachments, entities);
 }
 
 function secondWaterfallStep(session, results) {
@@ -156,6 +159,31 @@ function secondWaterfallStep(session, results) {
     else {
         let userId = session.userData.user._id;
         brain.fetchReply(userId, session);
+    }
+}
+
+function handleAttachmentForPlatform(channelId, attachments, entities) {
+
+    //Location attachments from Facebook are currnently found under entities
+    /*
+    [ { geo: 
+     { elevation: 0,
+       latitude: 19.05646514892578,
+       longitude: 72.90384674072266,
+       type: 'GeoCoordinates' },
+    type: 'Place' } ]
+
+    */
+    if (channelId.toLowerCase() === 'facebook') {
+        if (entities
+            && entities.length
+            && entities[0]
+            && entities[0].geo
+            && entities[0].geo.latitude
+            && entities[0].geo.longitude
+            && entities[0].type.toLowerCase() === 'place') {
+            session.send('Got your location ' + entities[0].geo.latitude + ' ' + entities[0].geo.longitude);
+        }
     }
 }
 
@@ -201,7 +229,7 @@ function getUserObject(session) {
     }
 }
 
-bot.dialog('/loadBrain', (session)=>{
+bot.dialog('/loadBrain', (session) => {
     let userId = session.userData.user._id;
     brain.loadBrain(userId, session);
 });
