@@ -189,6 +189,7 @@ function handleAttachmentForPlatform(channelId, attachments, entities, session) 
             && entities[0].geo.latitude
             && entities[0].geo.longitude
             && entities[0].type.toLowerCase() === 'place') {
+            let userId = session.userData.user._id;
             brain.handleLocation(userId, session, entities[0].geo.latitude, entities[0].geo.longitude);
         }
     }
