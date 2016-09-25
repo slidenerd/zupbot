@@ -136,11 +136,11 @@ function firstWaterfallStep(session, args, next) {
 
     //If we dont have a user attached to our session, time to create one
     if (!session.userData.user) {
-        console.log('user does not exist ' + session.message.address.channelId);
+        // console.log('user does not exist ' + session.message.address.channelId);
         session.beginDialog('/initUser')
     }
     else {
-        console.log('user does exist for ' + session.message.address.channelId);
+        // console.log('user does exist for ' + session.message.address.channelId);
         next();
     }
 
@@ -170,6 +170,7 @@ function secondWaterfallStep(session, results) {
         handleAttachmentForPlatform(channelId, attachments, entities, session);
     }
     else {
+        //TODO when the brains are not ready, cache the location temporarily and then when they are loaded, show details of the uploaded location
         session.send('You have sent me an attachment but give me a moment please, my brains are still lying on table. I am putting them inside.');
     }
 }

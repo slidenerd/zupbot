@@ -74,28 +74,7 @@ function report(resolve, reject, rs, args, userId, session) {
     getDealsOfTheDayFromFlipkart()
         .then((deals) => {
             if (deals) {
-                let attachments = []
 
-                //Build cards containing all the data
-                for (let deal of deals) {
-                    attachments.push(
-                        new builder.HeroCard(session)
-                    .title(deal.title)
-                    .subtitle(deal.subtitle)
-                    .images([
-                        builder.CardImage.create(session, deal.imageUrl)
-                            .tap(builder.CardAction.openUrl(session, deal.url)),
-                    ])
-                    .buttons([
-                        builder.CardAction.openUrl(session, deal.url, "View On Flipkart")
-                    ])
-                    )
-                }
-                rs.setUservar(userId, constants.VAR_FLIPKART_RESULTS_SIZE, deals.length)
-                let msg = new builder.Message(session)
-                    .attachments(attachments);
-                session.send(msg);
-                return rs.replyAsync(userId, constants.JS_TRIGGER_DEALS, this);
             }
             else {
                 session.send(utils.sendRandomMessage(constants.INFO_NO_DEALS_FOUND));
@@ -109,6 +88,50 @@ function report(resolve, reject, rs, args, userId, session) {
             console.log(error);
             reject(error);
         })
+}
+
+function handlePlatforms(userId, channelId, session, rs, deals) {
+    let attachments = []
+    if (channelId.toLowerCase() === 'facebook') {
+        //Build cards containing all the data
+        for (let deal of deals) {
+            attachments.push(
+                new builder.HeroCard(session)
+                    .title(deal.title)
+                    .subtitle(deal.subtitle)
+                    .images([
+                        builder.CardImage.create(session, deal.imageUrl)
+                            .tap(builder.CardAction.openUrl(session, deal.url)),
+                    ])
+                    .buttons([
+                        builder.CardAction.openUrl(session, deal.url, "View On Flipkart")
+                    ])
+            )
+        }
+    }
+    else {
+        //Build cards containing all the data
+        for (let deal of deals) {
+            attachments.push(
+                new builder.HeroCard(session)
+                    .title(deal.title)
+                    .subtitle(deal.subtitle)
+                    .images([
+                        builder.CardImage.create(session, deal.imageUrl)
+                            .tap(builder.CardAction.openUrl(session, deal.url)),
+                    ])
+                    .buttons([
+                        builder.CardAction.openUrl(session, deal.url, "View On Flipkart")
+                    ])
+            )
+        }
+    }
+    rs.setUservar(userId, constants.VAR_FLIPKART_RESULTS_SIZE, deals.length)
+    let msg = new builder.Message(session)
+        .attachmentLayout(builder.AttachmentLayout.carousel)
+        .attachments(attachments);
+    session.send(msg);
+    return rs.replyAsync(userId, constants.JS_TRIGGER_DEALS, this);
 }
 
 let deals = {
