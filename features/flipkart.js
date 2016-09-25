@@ -126,11 +126,11 @@ function handlePlatforms(userId, channelId, session, rs, deals) {
                     .title(deal.title)
                     .subtitle(deal.subtitle)
                     .images([
-                        builder.CardImage.create(session, deal.httpsDealUrl)
-                            .tap(builder.CardAction.openUrl(session, deal.httpsDealUrl)),
+                        builder.CardImage.create(session, httpsImageUrl)
+                            .tap(builder.CardAction.openUrl(session, httpsDealUrl)),
                     ])
                     .buttons([
-                        builder.CardAction.openUrl(session, deal.httpsDealUrl, "View On Flipkart")
+                        builder.CardAction.openUrl(session, httpsDealUrl, "View On Flipkart")
                     ])
             )
         }
