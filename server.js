@@ -87,7 +87,7 @@ server.get('/.*/', restify.serveStatic({
 // Anytime the major version is incremented any existing conversations will be restarted.
 
 var dialogVersionOptions = {
-    version: 1.0,
+    version: 2.0,
     message: 'Bot update. Your conversation has been restarted.',
     resetCommand: /^reset/i
 };
