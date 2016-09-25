@@ -189,7 +189,7 @@ function handleAttachmentForPlatform(channelId, attachments, entities, session) 
             && entities[0].geo.latitude
             && entities[0].geo.longitude
             && entities[0].type.toLowerCase() === 'place') {
-            session.send('Got your location ' + entities[0].geo.latitude + ' ' + entities[0].geo.longitude);
+            brain.handleLocation(userId, session, entities[0].geo.latitude, entities[0].geo.longitude);
         }
     }
 }
@@ -205,14 +205,14 @@ function initUser(session) {
         //Query to check if this user ID already exists in the mongo db database
         let query = { _id: userObject._id }
         //If the userID exists, modify it, else insert a fresh user object into the database
-        crud.upsert(query, userObject, (error, document) => {
-            if (error) {
-                console.error(error);
-            }
-            else {
-                console.log('document added ' + document);
-            }
-        })
+        // crud.upsert(query, userObject, (error, document) => {
+        //     if (error) {
+        //         console.error(error);
+        //     }
+        //     else {
+        //         console.log('document added ' + document);
+        //     }
+        // })
     }
     session.endDialog();
 }

@@ -32,6 +32,23 @@ let b = {
         session.endDialog();
     },
 
+    handleLocation: function(userId, session,  lat, lon){
+        let topic = b.rs.getUservar(userId, 'topic');
+        if(topic === 'weather'){
+            console.log('topic is weather');
+            return true;
+        }
+        else if(topic === 'flipkart'){
+            console.log('topic is flipkart');
+            return true;
+        }
+        else if(topic === 'recharge'){
+            console.log('topic is deals');
+            return true;
+        }
+        return false;
+    },
+
     onDebug: function (message) {
         //print all the triggers on the console
     },

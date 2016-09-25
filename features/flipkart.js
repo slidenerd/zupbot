@@ -92,6 +92,9 @@ function report(resolve, reject, rs, args, userId, session) {
 }
 
 //TODO handle limits for each platform while displaying carousel, Facebook has a limit of 15, Skype has a limit of 5
+
+//TODO track this bug https://github.com/Microsoft/BotBuilder/issues/1167
+//If Skype is on, messenger doesnt show carousel and if messenger is ON, skype doesnt show carousel
 function handlePlatforms(userId, channelId, session, rs, deals) {
     let attachments = []
     if (channelId.toLowerCase() === 'facebook') {
