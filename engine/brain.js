@@ -46,6 +46,9 @@ let b = {
             console.log('topic is deals');
             return true;
         }
+        else{
+            console.log('no topic is going on currently');
+        }
         return false;
     },
 
