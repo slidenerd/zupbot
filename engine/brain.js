@@ -106,8 +106,8 @@ let b = {
         if (topic === 'weather') {
             session.send('topic is weather');
         }
-        else if (topic === 'flipkart') {
-            session.send('topic is flipkart');
+        else if (topic === 'deals') {
+            session.send('topic is deals');
         }
         else if (topic === 'recharge') {
             session.send('topic is deals');

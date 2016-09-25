@@ -40,6 +40,7 @@
 
 //The name of this topic is being referred to from JS code
 > topic deals
+
 	// The rules whose names start with js... are triggered from code
 	+ jsdeals
 	- Sure, I found <get count> deals for you on flipkart
