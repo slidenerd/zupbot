@@ -96,7 +96,8 @@ function handlePlatforms(userId, channelId, session, rs, deals) {
     let attachments = []
     if (channelId.toLowerCase() === 'facebook') {
         //Build cards containing all the data
-        for (let deal of deals) {
+        for (let i = 0; i < deals.length && i < constants.MESSENGER_CAROUSEL_LIMIT; i++) {
+            let deal = deals[i];
             attachments.push(
                 new builder.HeroCard(session)
                     .title(deal.title)
@@ -113,20 +114,23 @@ function handlePlatforms(userId, channelId, session, rs, deals) {
     }
     else {
         //Build cards containing all the data
+        //All skype urls must be in HTTPS else they wont be rendered
         for (let i = 0; i < deals.length && i < constants.SKYPE_CAROUSEL_LIMIT; i++) {
             let deal = deals[i];
             console.log(deal.url)
             console.log(deal.imageUrl)
+            let httpsDealUrl =  replaceHttpLinksWithHttpsForSkype(deal.url);
+            let httpsImageUrl = replaceHttpLinksWithHttpsForSkype(deal.imageUrl);
             attachments.push(
                 new builder.HeroCard(session)
                     .title(deal.title)
                     .subtitle(deal.subtitle)
                     .images([
-                        builder.CardImage.create(session, deal.imageUrl)
-                            .tap(builder.CardAction.openUrl(session, deal.url)),
+                        builder.CardImage.create(session, deal.httpsDealUrl)
+                            .tap(builder.CardAction.openUrl(session, deal.httpsDealUrl)),
                     ])
                     .buttons([
-                        builder.CardAction.openUrl(session, deal.url, "View On Flipkart")
+                        builder.CardAction.openUrl(session, deal.httpsDealUrl, "View On Flipkart")
                     ])
             )
         }
@@ -137,6 +141,12 @@ function handlePlatforms(userId, channelId, session, rs, deals) {
         .attachments(attachments);
     session.send(msg);
     return rs.replyAsync(userId, constants.JS_TRIGGER_DEALS, this);
+}
+
+//TODO do this with a regex that matches the beginning of each line
+function replaceHttpLinksWithHttpsForSkype(url){
+	let regex = 'http://'
+	return url.replace(regex, 'https://');
 }
 
 let deals = {
