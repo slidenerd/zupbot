@@ -137,9 +137,11 @@ function firstWaterfallStep(session, args, next) {
 
     //If we dont have a user attached to our session, time to create one
     if (!session.userData.user) {
+        console.log('user does not exist ' + session.message.address.channelId);
         session.beginDialog('/initUser')
     }
     else {
+        console.log('user does exist for ' + session.message.address.channelId);
         next();
     }
 }
@@ -169,7 +171,7 @@ function initUser(session) {
         //If the userID exists, modify it, else insert a fresh user object into the database
         crud.upsert(query, userObject, (error, document) => {
             if (error) {
-                console.error('error');
+                console.error(error);
             }
             else {
                 console.log('document added ' + document);
