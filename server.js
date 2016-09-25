@@ -154,47 +154,9 @@ function secondWaterfallStep(session, results) {
         session.beginDialog('/loadBrain');
     }
     else {
-        //Handle entites only if our brain files have been loaded successfully.
-        //You will receive an entity when someone sends their location through messenger
-        //Get the channel such as facebook, skype, slack etc
-        let channelId = session.message.address.channelId
-        //Get the entities sent by the user if any
-        let entities = session.message.entities;
-        if (isFacebookGeolocation(channelId, entities, session)) {
-            //Handle the attachment for each platform differently
-            handleFacebookGeolocation(channelId, entities, session);
-        }
-        else {
-            let userId = session.userData.user._id;
-            brain.fetchReply(userId, session);
-        }
+        let userId = session.userData.user._id;
+        brain.fetchReply(userId, session);
     }
-}
-/*
-Location attachments from Facebook are currently found under entities
-session.message.entities[ { geo: 
- { elevation: 0,
-   latitude: 19.05646514892578,
-   longitude: 72.90384674072266,
-   type: 'GeoCoordinates' },
-type: 'Place' } ]
-
-*/
-
-function isFacebookGeolocation(channelId, entities, session) {
-    return channelId === 'facebook'
-        && entities
-        && entities.length
-        && entities[0]
-        && entities[0].geo
-        && entities[0].geo.latitude
-        && entities[0].geo.longitude
-        && entities[0].type.toLowerCase() === 'place';
-}
-
-function handleFacebookGeolocation(channelId, entities, session) {
-    let userId = session.userData.user._id;
-    brain.handleFacebookGeolocation(userId, session, entities[0].geo.latitude, entities[0].geo.longitude);
 }
 
 bot.dialog('/initUser', initUser);

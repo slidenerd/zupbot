@@ -32,26 +32,6 @@ let b = {
         session.endDialog();
     },
 
-    handleLocation: function (userId, session, lat, lon) {
-        let topic = b.rs.getUservar(userId, 'topic');
-        if (topic === 'weather') {
-            console.log('topic is weather');
-            return true;
-        }
-        else if (topic === 'flipkart') {
-            console.log('topic is flipkart');
-            return true;
-        }
-        else if (topic === 'recharge') {
-            console.log('topic is deals');
-            return true;
-        }
-        else {
-            console.log('no topic is going on currently');
-        }
-        return false;
-    },
-
     onDebug: function (message) {
         //print all the triggers on the console
     },
@@ -76,14 +56,65 @@ let b = {
     },
 
     fetchReply: function (userId, session) {
-        session.sendTyping();
-        b.rs.replyAsync(userId, session.message.text, b.this)
-            .then(function (reply) {
-                session.send(reply);
-            }).catch(function (error) {
-                // something went wrong
-                console.log(error);
-            });
+        if (!b.handlePlatformSpecificEntities(userId, session)) {
+            session.sendTyping();
+            b.rs.replyAsync(userId, session.message.text, b.this)
+                .then(function (reply) {
+                    session.send(reply);
+                }).catch(function (error) {
+                    // something went wrong
+                    console.log(error);
+                });
+        }
+    },
+
+    handlePlatformSpecificEntities: function (userId, session) {
+        //Get the channel such as facebook, skype, slack etc
+        let channelId = session.message.address.channelId
+        //Get the entities sent by the user if any
+        let entities = session.message.entities;
+        if (channelId.toLowerCase() === 'facebook') {
+            /*
+            Location attachments from Facebook are currently found under entities
+            session.message.entities[ { geo: 
+             { elevation: 0,
+               latitude: 19.05646514892578,
+               longitude: 72.90384674072266,
+               type: 'GeoCoordinates' },
+            type: 'Place' } ]
+            
+            */
+            if (entities
+                && entities.length
+                && entities[0]
+                && entities[0].geo
+                && entities[0].geo.latitude
+                && entities[0].geo.longitude
+                && entities[0].type.toLowerCase() === 'place') {
+                b.handleFacebookGeolocation(userId, session, entities[0].geo.latitude, entities[0].geo.longitude);
+                return true;
+            }
+        }
+        return false;
+    },
+    handleFacebookGeolocation: function (userId, session, lat, lon) {
+        //Get the channel such as facebook, skype, slack etc
+        let channelId = session.message.address.channelId
+        //Get the entities sent by the user if any
+        let entities = session.message.entities;
+        let topic = b.rs.getUservar(userId, 'topic');
+        if (topic === 'weather') {
+            session.send('topic is weather');
+        }
+        else if (topic === 'flipkart') {
+            session.send('topic is flipkart');
+        }
+        else if (topic === 'recharge') {
+            session.send('topic is deals');
+        }
+        else {
+            session.send('no topic is going on currently');
+        }
     },
 
     getUservars: function (userId) {
