@@ -147,7 +147,7 @@ function firstWaterfallStep(session, args, next) {
     let channelId = session.message.address.channelId
     let attachments = session.message.attachments;
     let entities = session.message.entities;
-    handleAttachmentForPlatform(channelId, attachments, entities);
+    handleAttachmentForPlatform(channelId, attachments, entities, session);
 }
 
 function secondWaterfallStep(session, results) {
@@ -162,7 +162,7 @@ function secondWaterfallStep(session, results) {
     }
 }
 
-function handleAttachmentForPlatform(channelId, attachments, entities) {
+function handleAttachmentForPlatform(channelId, attachments, entities, session) {
 
     //Location attachments from Facebook are currnently found under entities
     /*
