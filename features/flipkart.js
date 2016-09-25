@@ -96,7 +96,7 @@ function handlePlatforms(userId, channelId, session, rs, deals) {
     let attachments = []
     if (channelId.toLowerCase() === 'facebook') {
         //Build cards containing all the data
-        for (let i = 0; i < deals.length; i++) {
+        for (let i = 0; i < deals.length && i < constants.MESSENGER_CAROUSEL_LIMIT; i++) {
             let deal = deals[i];
             attachments.push(
                 new builder.HeroCard(session)
