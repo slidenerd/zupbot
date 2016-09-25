@@ -145,7 +145,7 @@ function firstWaterfallStep(session, args, next) {
     }
 
     let channelId = session.message.address.channelId
-    let attachements = session.message.attachments;
+    let attachments = session.message.attachments;
     let entities = session.message.entities;
     handleAttachmentForPlatform(channelId, attachments, entities);
 }
