@@ -126,7 +126,7 @@ function firstWaterfallStep(session, args, next) {
             //If we have a valid user id at this point, we ll get the user information
             let userId = session.userData.user._id;
             if (userId) {
-                console.log(brain.getUservars(userId))
+                
             }
 
             //Remove the interval to avoid triggering it till the next interaction
@@ -170,14 +170,14 @@ function initUser(session) {
         //Query to check if this user ID already exists in the mongo db database
         let query = { _id: userObject._id }
         //If the userID exists, modify it, else insert a fresh user object into the database
-        // crud.upsert(query, userObject, (error, document) => {
-        //     if (error) {
-        //         console.error(error);
-        //     }
-        //     else {
-        //         console.log('document added ' + document);
-        //     }
-        // })
+        crud.upsert(query, userObject, (error, document) => {
+            if (error) {
+                console.error(error);
+            }
+            else {
+                console.log('document added ' + document);
+            }
+        })
     }
     session.endDialog();
 }
