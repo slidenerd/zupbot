@@ -91,6 +91,7 @@ function report(resolve, reject, rs, args, userId, session) {
         })
 }
 
+//TODO handle limits for each platform while displaying carousel, Facebook has a limit of 15, Skype has a limit of 5
 function handlePlatforms(userId, channelId, session, rs, deals) {
     let attachments = []
     if (channelId.toLowerCase() === 'facebook') {
@@ -112,7 +113,8 @@ function handlePlatforms(userId, channelId, session, rs, deals) {
     }
     else {
         //Build cards containing all the data
-        for (let deal of deals) {
+        for (let i = 0; i < deals.length && i < 5; i++) {
+            let deal = deals[i];
             attachments.push(
                 new builder.HeroCard(session)
                     .title(deal.title)
