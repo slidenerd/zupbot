@@ -29,6 +29,7 @@ let constants = {
     JS_TRIGGER_WEATHER: 'jsweather',
     OPEN_WEATHER_MAP_API_KEY: '353263113c293de88e214ced88de05a7',
     PERSIST_DATA_AFTER: 1000*30,
+    SKYPE_CAROUSEL_LIMIT: 5,
     UNITS_METRIC: 'metric',
     VAR_FLIPKART_RESULTS_SIZE: 'count'
 }

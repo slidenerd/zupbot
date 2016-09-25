@@ -113,8 +113,10 @@ function handlePlatforms(userId, channelId, session, rs, deals) {
     }
     else {
         //Build cards containing all the data
-        for (let i = 0; i < deals.length && i < 5; i++) {
+        for (let i = 0; i < deals.length && i < constants.SKYPE_CAROUSEL_LIMIT; i++) {
             let deal = deals[i];
+            console.log(deal.url)
+            console.log(deal.imageUrl)
             attachments.push(
                 new builder.HeroCard(session)
                     .title(deal.title)
