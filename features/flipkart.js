@@ -74,7 +74,8 @@ function report(resolve, reject, rs, args, userId, session) {
     getDealsOfTheDayFromFlipkart()
         .then((deals) => {
             if (deals) {
-
+                let channelId = session.message.address.channelId;
+                return handlePlatforms(userId, channelId,session, rs, deals)
             }
             else {
                 session.send(utils.sendRandomMessage(constants.INFO_NO_DEALS_FOUND));

@@ -169,10 +169,6 @@ function secondWaterfallStep(session, results) {
         //Handle the attachment for each platform differently
         handleAttachmentForPlatform(channelId, attachments, entities, session);
     }
-    else {
-        //TODO when the brains are not ready, cache the location temporarily and then when they are loaded, show details of the uploaded location
-        session.send('You have sent me an attachment but give me a moment please, my brains are still lying on table. I am putting them inside.');
-    }
 }
 /*
 Location attachments from Facebook are currently found under entities
