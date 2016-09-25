@@ -96,7 +96,7 @@ function handlePlatforms(userId, channelId, session, rs, deals) {
     let attachments = []
     if (channelId.toLowerCase() === 'facebook') {
         //Build cards containing all the data
-        for (let i = 0; i < deals.length && i < constants.MESSENGER_CAROUSEL_LIMIT; i++) {
+        for (let i = 0; i < deals.length; i++) {
             let deal = deals[i];
             attachments.push(
                 new builder.HeroCard(session)
@@ -117,8 +117,6 @@ function handlePlatforms(userId, channelId, session, rs, deals) {
         //All skype urls must be in HTTPS else they wont be rendered
         for (let i = 0; i < deals.length && i < constants.SKYPE_CAROUSEL_LIMIT; i++) {
             let deal = deals[i];
-            console.log(deal.url)
-            console.log(deal.imageUrl)
             let httpsDealUrl =  replaceHttpLinksWithHttpsForSkype(deal.url);
             let httpsImageUrl = replaceHttpLinksWithHttpsForSkype(deal.imageUrl);
             attachments.push(
