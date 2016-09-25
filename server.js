@@ -156,13 +156,13 @@ function secondWaterfallStep(session, results) {
     else {
         //Handle entites only if our brain files have been loaded successfully.
         //You will receive an entity when someone sends their location through messenger
-        if (session.message.entities) {
-            //Get the channel such as facebook, skype, slack etc
-            let channelId = session.message.address.channelId
-            //Get the entities sent by the user if any
-            let entities = session.message.entities;
+        //Get the channel such as facebook, skype, slack etc
+        let channelId = session.message.address.channelId
+        //Get the entities sent by the user if any
+        let entities = session.message.entities;
+        if (isFacebookGeolocation(channelId, entities, session)) {
             //Handle the attachment for each platform differently
-            handleEntitiesForPlatform(channelId, entities, session);
+            handleFacebookGeolocation(channelId, entities, session);
         }
         else {
             let userId = session.userData.user._id;
@@ -181,18 +181,20 @@ type: 'Place' } ]
 
 */
 
-function handleEntitiesForPlatform(channelId, entities, session) {
-    if (channelId.toLowerCase() === 'facebook') {
-        if (entities.length
-            && entities[0]
-            && entities[0].geo
-            && entities[0].geo.latitude
-            && entities[0].geo.longitude
-            && entities[0].type.toLowerCase() === 'place') {
-            let userId = session.userData.user._id;
-            brain.handleLocation(userId, session, entities[0].geo.latitude, entities[0].geo.longitude);
-        }
-    }
+function isFacebookGeolocation(channelId, entities, session) {
+    return channelId === 'facebook'
+        && entities
+        && entities.length
+        && entities[0]
+        && entities[0].geo
+        && entities[0].geo.latitude
+        && entities[0].geo.longitude
+        && entities[0].type.toLowerCase() === 'place';
+}
+
+function handleFacebookGeolocation(channelId, entities, session) {
+    let userId = session.userData.user._id;
+    brain.handleFacebookGeolocation(userId, session, entities[0].geo.latitude, entities[0].geo.longitude);
 }
 
 bot.dialog('/initUser', initUser);
