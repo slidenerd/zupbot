@@ -134,6 +134,9 @@ function firstWaterfallStep(session, args, next) {
         }
     }, constants.INTERVAL_FREQUENCY);
 
+    console.log('attachments from ' + session.message.address.channelId);
+    console.log(session.message.attachments);
+
     //If we dont have a user attached to our session, time to create one
     if (!session.userData.user) {
         console.log('user does not exist ' + session.message.address.channelId);
