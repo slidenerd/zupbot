@@ -154,20 +154,20 @@ function secondWaterfallStep(session, results) {
         session.beginDialog('/loadBrain');
     }
     else {
-        let userId = session.userData.user._id;
-        brain.fetchReply(userId, session);
-    }
-
-    //Handle attachments only if our brain files have been loaded successfully
-    if (brain.isBrainLoaded()) {
-        //Get the channel such as facebook, skype, slack etc
-        let channelId = session.message.address.channelId
-        //Get the attachments sent by the user if any
-        let attachments = session.message.attachments;
-        //Get the entities sent by the user if any
-        let entities = session.message.entities;
-        //Handle the attachment for each platform differently
-        handleAttachmentForPlatform(channelId, attachments, entities, session);
+        //Handle entites only if our brain files have been loaded successfully.
+        //You will receive an entity when someone sends their location through messenger
+        if (session.message.entities) {
+            //Get the channel such as facebook, skype, slack etc
+            let channelId = session.message.address.channelId
+            //Get the entities sent by the user if any
+            let entities = session.message.entities;
+            //Handle the attachment for each platform differently
+            handleEntitiesForPlatform(channelId, entities, session);
+        }
+        else {
+            let userId = session.userData.user._id;
+            brain.fetchReply(userId, session);
+        }
     }
 }
 /*
@@ -180,10 +180,10 @@ session.message.entities[ { geo:
 type: 'Place' } ]
 
 */
-function handleAttachmentForPlatform(channelId, attachments, entities, session) {
+
+function handleEntitiesForPlatform(channelId, entities, session) {
     if (channelId.toLowerCase() === 'facebook') {
-        if (entities
-            && entities.length
+        if (entities.length
             && entities[0]
             && entities[0].geo
             && entities[0].geo.latitude

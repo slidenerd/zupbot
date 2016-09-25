@@ -32,21 +32,21 @@ let b = {
         session.endDialog();
     },
 
-    handleLocation: function(userId, session,  lat, lon){
+    handleLocation: function (userId, session, lat, lon) {
         let topic = b.rs.getUservar(userId, 'topic');
-        if(topic === 'weather'){
+        if (topic === 'weather') {
             console.log('topic is weather');
             return true;
         }
-        else if(topic === 'flipkart'){
+        else if (topic === 'flipkart') {
             console.log('topic is flipkart');
             return true;
         }
-        else if(topic === 'recharge'){
+        else if (topic === 'recharge') {
             console.log('topic is deals');
             return true;
         }
-        else{
+        else {
             console.log('no topic is going on currently');
         }
         return false;

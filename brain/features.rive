@@ -32,7 +32,7 @@
 + [*] (@weathersynonyms) [*]
 - I feel the heat inside your pocket too but as long as you keep me out, I like the weather
 
-+ [*] flipkart [*]{weight=999}
++ [*] (flipkart|flip kart) [*]{weight=999}
 - <call>getDealsOfTheDayFromFlipkart</call>{topic=deals}
 
 + [*] (@dealsynonyms) [*]{weight=999}
