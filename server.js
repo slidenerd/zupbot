@@ -112,7 +112,7 @@ function firstWaterfallStep(session, args, next) {
     //create a timeout to persist their data after they have been inactive for a while
     let timeout = setInterval(() => {
 
-        //get the current time when this callback is triggered
+        // get the current time when this callback is triggered
         let currentTime = new Date();
 
         //Find the difference between the time user last had a conversation with our bot
@@ -144,13 +144,10 @@ function firstWaterfallStep(session, args, next) {
         next();
     }
 
-    let channelId = session.message.address.channelId
-    let attachments = session.message.attachments;
-    let entities = session.message.entities;
-    handleAttachmentForPlatform(channelId, attachments, entities, session);
 }
 
 function secondWaterfallStep(session, results) {
+
 
     //if our rive triggers have not been loaded, load them into memory
     if (!brain.isBrainLoaded()) {
@@ -160,20 +157,33 @@ function secondWaterfallStep(session, results) {
         let userId = session.userData.user._id;
         brain.fetchReply(userId, session);
     }
+
+    //Handle attachments only if our brain files have been loaded successfully
+    if (brain.isBrainLoaded()) {
+        //Get the channel such as facebook, skype, slack etc
+        let channelId = session.message.address.channelId
+        //Get the attachments sent by the user if any
+        let attachments = session.message.attachments;
+        //Get the entities sent by the user if any
+        let entities = session.message.entities;
+        //Handle the attachment for each platform differently
+        handleAttachmentForPlatform(channelId, attachments, entities, session);
+    }
+    else {
+        session.send('You have sent me an attachment but give me a moment please, my brains are still lying on table. I am putting them inside.');
+    }
 }
+/*
+Location attachments from Facebook are currently found under entities
+session.message.entities[ { geo: 
+ { elevation: 0,
+   latitude: 19.05646514892578,
+   longitude: 72.90384674072266,
+   type: 'GeoCoordinates' },
+type: 'Place' } ]
 
+*/
 function handleAttachmentForPlatform(channelId, attachments, entities, session) {
-
-    //Location attachments from Facebook are currnently found under entities
-    /*
-    [ { geo: 
-     { elevation: 0,
-       latitude: 19.05646514892578,
-       longitude: 72.90384674072266,
-       type: 'GeoCoordinates' },
-    type: 'Place' } ]
-
-    */
     if (channelId.toLowerCase() === 'facebook') {
         if (entities
             && entities.length
@@ -190,8 +200,8 @@ function handleAttachmentForPlatform(channelId, attachments, entities, session) 
 bot.dialog('/initUser', initUser);
 
 function initUser(session) {
-    let userObject = getUserObject(session);
-    //We dont want a person whose name is null, simple as that
+    let userObject = extractUserObject(session);
+    // We dont want a person whose name is null, simple as that
     if (userObject._id && userObject.userName) {
         //Add this object to be tracked across our session
         session.userData.user = userObject;
@@ -210,7 +220,7 @@ function initUser(session) {
     session.endDialog();
 }
 
-function getUserObject(session) {
+function extractUserObject(session) {
     //Create a new user object to be stored in the mongo db database
     //Add an _id that acts as the primary key
     //Add the name of our user
