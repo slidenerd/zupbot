@@ -11,58 +11,81 @@ const
 	//The name of the rive trigger to invoke while displaying results
     weatherTrigger = constants.JS_TRIGGER_WEATHER;
 
-function init(rs, userId, session){
-	rs.setSubroutine(weatherSubroutine, (rs, args)=>{
-		return new rs.Promise((resolve, reject)=>{
+function init(rs, userId, session) {
+	rs.setSubroutine(weatherSubroutine, (rs, args) => {
+		return new rs.Promise((resolve, reject) => {
 			report(resolve, reject, rs, args, userId, session);
 		});
 	});
 }
 
-function findWeather(lat, lon){
-
-	let options = {
+function getWeatherQuery(lat, lon) {
+	return {
 		url: constants.ENDPOINT_OPEN_WEATHER_MAP, //URL to hit
 		qs: {
-			lat: lat, 
+			lat: lat,
 			lon: lon,
 			units: constants.UNITS_METRIC,
 			appid: constants.OPEN_WEATHER_MAP_API_KEY
 		}, //Query string data
-		headers: {'Accept':'application/json'},
+		headers: { 'Accept': 'application/json' },
 		json: true
 	}
+}
 
-	return new Promise((resolve, reject)=>{
-		request(options, (error, response, body)=>{
+function findWeather(lat, lon) {
+	let options = getWeatherQuery(lat, lon);
+	return new Promise((resolve, reject) => {
+		request(options, (error, response, body) => {
 			callback(resolve, reject, error, response, body)
 		});
 	});
 }
 
-function callback(resolve, reject, error, response, body){
-	if(!error && response.statusCode == 200) {
+function handleFacebookGeolocation(rs, userId, session, lat, lon) {
+	findWeather(lat, lon)
+		.then((weatherReport) => {
+			if (weatherReport) {
+				weatherReport.location = 'your place'
+				rs.setUservars(userId, weatherReport)
+				return rs.replyAsync(userId, weatherTrigger, this);
+			}
+			else {
+				reject(weatherReport);
+			}
+		})
+		.then((reply) => {
+			resolve(reply);
+		})
+		.catch((error) => {
+			handleError(error, session)
+			reject(error);
+		})
+}
+
+function callback(resolve, reject, error, response, body) {
+	if (!error && response.statusCode == 200) {
 		let report = parse(body);
 		resolve(report);
 	} else {
-		reject({error: error, code: errorCodes.weatherLookupFailed});
+		reject({ error: error, code: errorCodes.weatherLookupFailed });
 	}
 }
 
-function parse(json){
-	if(json.coord 
-	&& json.coord.lat
-	&& json.coord.lon
-	&& json.weather
-	&& json.weather.length
-	&& json.weather[0]
-	&& json.weather[0].description
-	&& json.main
-	&& json.main.temp
-	&& json.wind
-	&& json.clouds
-	&& json.sys){
-	return {
+function parse(json) {
+	if (json.coord
+		&& json.coord.lat
+		&& json.coord.lon
+		&& json.weather
+		&& json.weather.length
+		&& json.weather[0]
+		&& json.weather[0].description
+		&& json.main
+		&& json.main.temp
+		&& json.wind
+		&& json.clouds
+		&& json.sys) {
+		return {
 			lat: json.coord.lat,
 			lon: json.coord.lon,
 			main: json.weather[0].main,
@@ -81,37 +104,37 @@ function parse(json){
 			sunset: json.sys.sunset
 		}
 	}
-	
+
 }
 
-function report(resolve, reject, rs, args, userId, session){
+function report(resolve, reject, rs, args, userId, session) {
 	geo.reverseGeocode(args[0])
-	.then((cities)=>{
-		return findWeather(cities[0].lat, cities[0].lon);
-	})
-	.then((weatherReport)=>{
-		//Save the user input location so that we can show it in the response
-		if(weatherReport){
-			weatherReport.location = args[0]
-			rs.setUservars(userId, weatherReport)
-			return rs.replyAsync(userId, weatherTrigger, this);
-		}
-		else{
-			reject(weatherReport);
-		}
-	})
-	.then((reply)=>{
-		resolve(reply);
-	})
-	.catch((error)=>{
-		handleError(error, session)
-		reject(error);
-	})
+		.then((cities) => {
+			return findWeather(cities[0].lat, cities[0].lon);
+		})
+		.then((weatherReport) => {
+			//Save the user input location so that we can show it in the response
+			if (weatherReport) {
+				weatherReport.location = args[0]
+				rs.setUservars(userId, weatherReport)
+				return rs.replyAsync(userId, weatherTrigger, this);
+			}
+			else {
+				reject(weatherReport);
+			}
+		})
+		.then((reply) => {
+			resolve(reply);
+		})
+		.catch((error) => {
+			handleError(error, session)
+			reject(error);
+		})
 }
 
-function handleError(error, session){
-    if(error && error.code){
-        switch(error.code){
+function handleError(error, session) {
+    if (error && error.code) {
+        switch (error.code) {
 			case errorCodes.cityNotFound:
 				session.send('Could not find the city');
 				break;
@@ -129,7 +152,8 @@ function handleError(error, session){
 }
 
 let weather = {
-	init: init
+	init: init,
+	handleFacebookGeolocation: handleFacebookGeolocation
 }
 
 module.exports = weather;

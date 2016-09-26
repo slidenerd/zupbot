@@ -29,7 +29,6 @@ let b = {
             (error, batchNumber) => {
                 b.onLoadFailed(error, batchNumber, session);
             });
-        session.endDialog();
     },
 
     onDebug: function (message) {
@@ -104,13 +103,7 @@ let b = {
         let entities = session.message.entities;
         let topic = b.rs.getUservar(userId, 'topic');
         if (topic === 'weather') {
-            session.send('topic is weather');
-        }
-        else if (topic === 'deals') {
-            session.send('topic is deals');
-        }
-        else if (topic === 'recharge') {
-            session.send('topic is deals');
+            weather.handleFacebookGeolocation(b.rs, userId, session, lat, lon)
         }
         else {
             session.send('no topic is going on currently');

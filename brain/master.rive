@@ -31,11 +31,20 @@
 + my favorite * is *
 - <set fav<star1>=<star2>>Why is it your favorite?
 
++ [*] i am single [*]
+@ i am single
+
 + i am single
-- <set status=single><set spouse=nobody>I am too.
+- <set status=single><set spouse=nobody>I, on the other hand has got several cores to give me company inside your processor
+
++ [*] i have a girlfriend [*]
+@ i have a girlfriend
 
 + i have a girlfriend
 - <set status=girlfriend>What's her name?
+
++ [*] i have a boyfriend [*]
+@ i have a boyfriend
 
 + i have a boyfriend
 - <set status=boyfriend>What's his name?
@@ -52,9 +61,22 @@
 - <set spouse=<formal>>That's a nice name.
 
 + (what is my name|who am i|do you know my name|do you know who i am){weight=10}
+* <get name> == undefined => You havent told me your name yet, so what is your name?
 - Your name is <get name>.
 - You told me your name is <get name>.
 - Aren't you <get name>?
+
++ [*] my name is *
+% you havent told me your name yet so what is your name
+- <set name=<star>> Gotcha, your name is <get name>
+
++ [*] i am *
+% you havent told me your name yet so what is your name
+- <set name=<star>> Gotcha, your name is <get name>
+
++ *
+% you havent told me your name yet so what is your name
+- <set name=<star>> Gotcha, your name is <get name>
 
 + (how old am i|do you know how old i am|do you know my age){weight=10}
 - You are <get age> years old.
@@ -80,9 +102,6 @@
 + <bot name> *
 - Yes? {@<star>}
 
-+ asl
-- <bot age>/<bot sex>/<bot location>
-
 + (what is your name|who are you|who is this)
 - I am <bot name>.
 - You can call me <bot name>.
@@ -97,8 +116,10 @@
 + are you (@malenoun) or (@femalenoun)
 - I'm a <bot sex>.
 
-+ where (are you|are you from|do you live)
-- I'm from <bot location>.
++ [*] where (are you|are you from|do you live) [*]
+* <star1> == do you live => I live in <bot location>
+- My home is actually inside your phone but my brain is based in <bot location>.
+
 
 + what (city|town) (are you from|do you live in)
 - I'm in <bot city>.

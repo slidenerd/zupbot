@@ -46,6 +46,7 @@ const
     brain = require('./engine/brain'),
     constants = require('./engine/constants'),
     crud = require('./db/crud'),
+    debug = require('debug')('server.js'),
     restify = require('restify');
 
 //=========================================================
@@ -55,7 +56,7 @@ const
 // Setup Restify Server
 let server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, function () {
-    console.log('%s listening to %s', server.name, server.url);
+    debug('%s listening to %s', server.name, server.url);
 });
 
 // Create chat bot
@@ -71,7 +72,7 @@ server.post(constants.ENDPOINT_MESSAGES, connector.listen());
 // 	'directory': '.',
 // 	'default': 'index.html'
 // }));
-console.log(__dirname);
+debug(__dirname);
 server.get('/.*/', restify.serveStatic({
 
     //Ensure that people can only access the files within the public directory and none of the protected server files
@@ -126,7 +127,7 @@ function firstWaterfallStep(session, args, next) {
             //If we have a valid user id at this point, we ll get the user information
             let userId = session.userData.user._id;
             if (userId) {
-                
+
             }
 
             //Remove the interval to avoid triggering it till the next interaction
@@ -136,11 +137,11 @@ function firstWaterfallStep(session, args, next) {
 
     //If we dont have a user attached to our session, time to create one
     if (!session.userData.user) {
-        // console.log('user does not exist ' + session.message.address.channelId);
+        // debug('user does not exist ' + session.message.address.channelId);
         session.beginDialog('/initUser')
     }
     else {
-        // console.log('user does exist for ' + session.message.address.channelId);
+        // debug('user does exist for ' + session.message.address.channelId);
         next();
     }
 
@@ -175,7 +176,7 @@ function initUser(session) {
                 console.error(error);
             }
             else {
-                console.log('document added ' + document);
+                debug('document added ' + document);
             }
         })
     }
@@ -204,4 +205,5 @@ function extractUserObject(session) {
 bot.dialog('/loadBrain', (session) => {
     let userId = session.userData.user._id;
     brain.loadBrain(userId, session);
+    session.endDialog();
 });

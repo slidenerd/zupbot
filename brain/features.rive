@@ -75,9 +75,7 @@
 < topic
 
 + [*] (@weathersynonyms) [*] (at|in|of|for) *{weight=997}
-- Allright, chill out while I try to get the <star1> <star2> <star3> <call>findWeather {formal}<star3>{/formal}</call> {topic=weather}
-- Got, it, let me search the <star1> <star2> <star3> and get back to you <call>findWeather {formal}<star3>{/formal}</call> {topic=weather}
-- Yes boss, I am on it. Let's see what the weather gods say about the <star1> <star2> <star3> <call>findWeather {formal}<star3>{/formal}</call> {topic=weather} 
+- <call>findWeather {formal}<star3>{/formal}</call> {topic=weather} 
 
 //The name of this topic is being referred to from JS code
 > topic weather
@@ -86,9 +84,9 @@
 	+ jsweather
 	* <get temperature> == null => Ooops, I couldn't get any weather report that clearly mentions the temperature.
 	* <get location> == null => I couldn't get any weather report for this place.
-	- The temperature at <get location> is <get temperature> degrees C and the humidity is <get humidity>% 
-	- The temperature is <get temperature> degrees C at <get location> and the humidity is <get humidity>% 
-	- The temperature at <get location> seems to be <get temperature> degrees C and it is <get humidity>% humid 
+	- The weather gods told me that the temperature at <get location> is <get temperature> degrees C and the humidity is <get humidity>% 
+	- I sent an email to the weather gods and this was their reply. The temperature is <get temperature> degrees C at <get location> and the humidity is <get humidity>% 
+	- I said 'ping ping' to the weather gods and they replied back with a 'ding ding'. The temperature at <get location> seems to be <get temperature> degrees C and it is <get humidity>% humid 
 
 	+ [*] humidity [*]
 	- It is <get humidity>% humid at <get location>
