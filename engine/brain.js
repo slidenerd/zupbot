@@ -83,6 +83,7 @@ let b = {
             type: 'Place' } ]
             
             */
+            console.log(entities);
             if (entities
                 && entities.length
                 && entities[0]

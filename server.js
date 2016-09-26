@@ -127,7 +127,7 @@ function firstWaterfallStep(session, args, next) {
             //If we have a valid user id at this point, we ll get the user information
             let userId = session.userData.user._id;
             if (userId) {
-
+                
             }
 
             //Remove the interval to avoid triggering it till the next interaction
