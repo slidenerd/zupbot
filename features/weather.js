@@ -43,6 +43,7 @@ function findWeather(lat, lon) {
 }
 
 function handleFacebookGeolocation(rs, userId, session, lat, lon) {
+	session.send('ok this was called')
 	findWeather(lat, lon)
 		.then((weatherReport) => {
 			weatherReport.location = 'your place'
@@ -104,16 +105,14 @@ function parse(json) {
 			dt: json.dt,
 			countryCode: json.sys.country,
 			sunrise: json.sys.sunrise,
-			sunset: json.sys.sunset,
-			location: ''
+			sunset: json.sys.sunset
 		}
 	}
-	else {
-		return null;
-	}
+	return null;
 }
 
 function report(resolve, reject, rs, args, userId, session) {
+	session.send('omg this is getting called');
 	geo.reverseGeocode(args[0])
 		.then((cities) => {
 			return findWeather(cities[0].lat, cities[0].lon);

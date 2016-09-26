@@ -280,6 +280,14 @@
 - Do you sometimes wish you were <star>?
 - Perhaps you would like to be <star>.
 
++ you are an (smart|awesome|fantastic|wonderful|amazing|badass) *
+@ you are fantastic
+
++ you are (smart|awesome|fantastic|wonderful|amazing|badass)
+- You are <star> too!
+- Thank you, you are <star> too
+- Why, thank you so much, since you are <star> too, I guess we have a lot in common
+
 + * are *
 - Did you think they might not be <star2>?
 - Would you like it if they were not <star2>?
@@ -421,6 +429,11 @@
 - You believe I can <star> don't you?
 - You want me to be able to <star>.
 - Perhaps you would like to be able to <star> yourself.
+
++ can you say *
+- Of course, I can say <star>
+- Here, <star>
+- Ok, I just said <star>
 
 + can i *
 - Whether or not you can <star> depends on you more than on me.
