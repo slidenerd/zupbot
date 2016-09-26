@@ -46,9 +46,9 @@ function handleFacebookGeolocation(rs, userId, session, lat, lon) {
 	session.send('ok this was called')
 	findWeather(lat, lon)
 		.then((weatherReport) => {
-			weatherReport.location = 'your place'
+			weatherReport.location = 'your place';
 			console.log('got the report');
-			rs.setUservars(userId, weatherReport)
+			rs.setUservars(userId, weatherReport);
 			return rs.replyAsync(userId, weatherTrigger, this);
 		})
 		.then((reply) => {
@@ -56,7 +56,7 @@ function handleFacebookGeolocation(rs, userId, session, lat, lon) {
 			resolve(reply);
 		})
 		.catch((error) => {
-			console.log('error oops')
+			console.log(error);
 			handleError(error, session)
 			reject(error);
 		})
@@ -112,7 +112,6 @@ function parse(json) {
 }
 
 function report(resolve, reject, rs, args, userId, session) {
-	session.send('omg this is getting called');
 	geo.reverseGeocode(args[0])
 		.then((cities) => {
 			return findWeather(cities[0].lat, cities[0].lon);
