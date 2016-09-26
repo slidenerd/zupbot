@@ -1,5 +1,4 @@
 ! version = 2.0
-// For each trigger with a weight, add a previous with the same weight, refer this https://github.com/aichaos/rivescript-js/issues/113
 // Bot Variables
 ! var age          	= 1
 ! var author   = Tom Clancy

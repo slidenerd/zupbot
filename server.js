@@ -171,14 +171,14 @@ function initUser(session) {
         //Query to check if this user ID already exists in the mongo db database
         let query = { _id: userObject._id }
         //If the userID exists, modify it, else insert a fresh user object into the database
-        crud.upsert(query, userObject, (error, document) => {
-            if (error) {
-                console.error(error);
-            }
-            else {
-                debug('document added ' + document);
-            }
-        })
+        // crud.upsert(query, userObject, (error, document) => {
+        //     if (error) {
+        //         console.error(error);
+        //     }
+        //     else {
+        //         debug('document added ' + document);
+        //     }
+        // })
     }
     session.endDialog();
 }

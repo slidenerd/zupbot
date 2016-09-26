@@ -1,6 +1,6 @@
 ! version = 2.0
 // Learn stuff about our users.
-// For each trigger with a weight, add a previous with the same weight, refer this https://github.com/aichaos/rivescript-js/issues/113
+
 + my name is *
 - <set name=<formal>>Nice to meet you, <get name>.
 - <set name=<formal>><get name>, nice to meet you.
@@ -236,13 +236,10 @@
 - How are you doing. What can I do for you today
 - <star1> how are you doing today?
 
-+ *
-% how are you doing what can i do for you today
-@ how are you
-
-+ *
-% * how are you doing today
-@ how are you
++ i am [*] (great|good|awesome) [*]
+- Awesome! thats great to hear
+- Good! That makes two of us
+- Good to hear
 
 + [*] how are you [*]
 - I am great, thanks for asking

@@ -43,23 +43,14 @@ function findWeather(lat, lon) {
 }
 
 function handleFacebookGeolocation(rs, userId, session, lat, lon) {
-	console.log(lat, lon);
 	findWeather(lat, lon)
 		.then((weatherReport) => {
-			if (weatherReport) {
-				weatherReport.location = 'your place'
-				console.log('got the report');
-				rs.setUservars(userId, weatherReport)
-				return rs.replyAsync(userId, weatherTrigger, this);
-			}
-			else {
-				console.log('the report was empty');
-				reject(weatherReport);
-				return null;
-			}
+			weatherReport.location = 'your place'
+			console.log('got the report');
+			rs.setUservars(userId, weatherReport)
+			return rs.replyAsync(userId, weatherTrigger, this);
 		})
 		.then((reply) => {
-			console.log('heres the reply');
 			session.send(reply);
 			resolve(reply);
 		})
@@ -73,7 +64,12 @@ function handleFacebookGeolocation(rs, userId, session, lat, lon) {
 function callback(resolve, reject, error, response, body) {
 	if (!error && response.statusCode == 200) {
 		let report = parse(body);
-		resolve(report);
+		if (report) {
+			resolve(report);
+		}
+		else {
+			reject(report);
+		}
 	} else {
 		reject({ error: error, code: errorCodes.weatherLookupFailed });
 	}
@@ -108,10 +104,13 @@ function parse(json) {
 			dt: json.dt,
 			countryCode: json.sys.country,
 			sunrise: json.sys.sunrise,
-			sunset: json.sys.sunset
+			sunset: json.sys.sunset,
+			location: ''
 		}
 	}
-
+	else {
+		return null;
+	}
 }
 
 function report(resolve, reject, rs, args, userId, session) {
@@ -121,15 +120,9 @@ function report(resolve, reject, rs, args, userId, session) {
 		})
 		.then((weatherReport) => {
 			//Save the user input location so that we can show it in the response
-			if (weatherReport) {
-				weatherReport.location = args[0]
-				rs.setUservars(userId, weatherReport)
-				return rs.replyAsync(userId, weatherTrigger, this);
-			}
-			else {
-				reject(weatherReport);
-				return null;
-			}
+			weatherReport.location = args[0]
+			rs.setUservars(userId, weatherReport)
+			return rs.replyAsync(userId, weatherTrigger, this);
 		})
 		.then((reply) => {
 			resolve(reply);
@@ -141,7 +134,7 @@ function report(resolve, reject, rs, args, userId, session) {
 }
 
 function handleError(error, session) {
-    if (error && error.code) {
+    if (error) {
         switch (error.code) {
 			case errorCodes.cityNotFound:
 				session.send('Could not find the city');
@@ -154,6 +147,9 @@ function handleError(error, session) {
 				break;
 			case errorCodes.weatherNotFound:
 				session.send('Could not find weather');
+				break;
+			default:
+				session.send('The weather god gave me a lightning punch for waking him up. I was unable to find the weather this time');
 				break;
         }
     }
