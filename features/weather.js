@@ -53,12 +53,10 @@ function handleFacebookGeolocation(rs, userId, session, lat, lon) {
 		})
 		.then((reply) => {
 			session.send(reply);
-			resolve(reply);
 		})
 		.catch((error) => {
 			console.log(error);
 			handleError(error, session)
-			reject(error);
 		})
 }
 
