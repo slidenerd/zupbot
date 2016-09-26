@@ -43,22 +43,27 @@ function findWeather(lat, lon) {
 }
 
 function handleFacebookGeolocation(rs, userId, session, lat, lon) {
+	console.log(lat, lon);
 	findWeather(lat, lon)
 		.then((weatherReport) => {
 			if (weatherReport) {
 				weatherReport.location = 'your place'
+				console.log('got the report');
 				rs.setUservars(userId, weatherReport)
 				return rs.replyAsync(userId, weatherTrigger, this);
 			}
 			else {
+				console.log('the report was empty');
 				reject(weatherReport);
 			}
 		})
 		.then((reply) => {
+			console.log('heres the reply');
 			session.send(reply);
 			resolve(reply);
 		})
 		.catch((error) => {
+			console.log('error oops')
 			handleError(error, session)
 			reject(error);
 		})

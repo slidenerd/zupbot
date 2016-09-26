@@ -1,6 +1,6 @@
 ! version = 2.0
 // Learn stuff about our users.
-
+// For each trigger with a weight, add a previous with the same weight, refer this https://github.com/aichaos/rivescript-js/issues/113
 + my name is *
 - <set name=<formal>>Nice to meet you, <get name>.
 - <set name=<formal>><get name>, nice to meet you.

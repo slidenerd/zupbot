@@ -1,5 +1,5 @@
 'use strict';
-
+//Toogle debugging on RiveScript object when you need to debug
 const
     constants = require('./constants'),
     flipkart = require('../features/flipkart'),
@@ -11,7 +11,7 @@ const
 let b = {
     brainPath: './brain/',
     brainLoaded: false,
-    rs: new RiveScript({ debug: true, utf8: true, onDebug: this.onDebug }),
+    rs: new RiveScript({ debug: false, utf8: true, onDebug: this.onDebug }),
 
     isBrainLoaded: function () {
         return b.brainLoaded;

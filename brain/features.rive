@@ -2,6 +2,7 @@
 ! array weathersynonyms = weather|temperature|forecast|climate
 ! array dealsynonyms = coupon|coupons|discount|discounts|offers|deals
 
+// For each trigger with a weight, add a previous with the same weight, refer this https://github.com/aichaos/rivescript-js/issues/113
 + [*] (cab|taxi) [*] {weight=996}
 % *{weight=996}
 - I am assuming that you want me to book a <star> for you. My slow coach boss is still working on that feature.
@@ -85,6 +86,10 @@
 + [*] (@weathersynonyms) [*] (at|in|of|for) *{weight=997}
 % *{weight=997}
 - <call>findWeather {formal}<star3>{/formal}</call> {topic=weather} 
+
++ [*] (@weathersynonyms) [*] (at|in|of|for) my *{weight=997}
+% *{weight=997}
+- Can you share your location with me? Use the location pin on the screen.{topic=weather}
 
 //The name of this topic is being referred to from JS code
 > topic weather
