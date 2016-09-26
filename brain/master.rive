@@ -237,11 +237,11 @@
 - <star1> how are you doing today?
 
 + *
-% how are you doing what can i do for you today{weight=1}
+% how are you doing what can i do for you today
 @ how are you
 
 + *
-% * how are you doing today{weight=1}
+% * how are you doing today
 @ how are you
 
 + [*] how are you [*]
