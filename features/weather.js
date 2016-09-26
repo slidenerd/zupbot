@@ -55,6 +55,7 @@ function handleFacebookGeolocation(rs, userId, session, lat, lon) {
 			else {
 				console.log('the report was empty');
 				reject(weatherReport);
+				return null;
 			}
 		})
 		.then((reply) => {
@@ -127,6 +128,7 @@ function report(resolve, reject, rs, args, userId, session) {
 			}
 			else {
 				reject(weatherReport);
+				return null;
 			}
 		})
 		.then((reply) => {
