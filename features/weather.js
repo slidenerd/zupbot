@@ -55,14 +55,11 @@ function handleFacebookGeolocation(rs, userId, session, lat, lon) {
 			var replyMessage = new builder.Message(session).text(reply);
 			replyMessage.sourceEvent({
 				facebook: {
-					message: {
-						text: "Please share your location:",
-						quick_replies: [
-							{
-								"content_type": "location",
-							}
-						]
-					}
+					quick_replies: [
+						{
+							content_type: "location",
+						}
+					]
 				}
 			});
 			session.send(replyMessage);
