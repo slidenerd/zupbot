@@ -68,13 +68,13 @@
 < topic
 
 + [*] (what|how) [*] (@weathersynonyms) [*] (at|in|of|for) my *{weight=997}
-- Can you share your location with me? Use the location pin on the screen.{topic=weather}
+- <call>askLocation</call>{topic=weather}
 
 + [*] (what|how) [*] (@weathersynonyms) [*] (at|in|of|for) *{weight=997}
 - <call>findWeather {formal}<star4>{/formal}</call> {topic=weather}
 
 + [*] (@weathersynonyms) [*] (at|in|of|for) my *{weight=997}
-- Can you share your location with me? Use the location pin on the screen.{topic=weather}
+- <call>askLocation</call>{topic=weather}
 
 + [*] (@weathersynonyms) [*] (at|in|of|for) *{weight=997}
 - <call>findWeather {formal}<star3>{/formal}</call> {topic=weather} 

@@ -3,8 +3,9 @@
 const
     constants = require('./constants'),
     flipkart = require('../features/flipkart'),
-    RiveScript = require('rivescript'),
+    location = require('../features/location'),
     recharge = require('../features/recharge'),
+    RiveScript = require('rivescript'),
     utils = require('./utils'),
     weather = require('../features/weather');
 
@@ -43,9 +44,10 @@ let b = {
     },
 
     initSubroutines: function (userId, session) {
-        weather.init(b.rs, userId, session);
         flipkart.init(b.rs, userId, session);
+        location.init(b.rs, userId, session);
         recharge.init(b.rs, userId, session);
+        weather.init(b.rs, userId, session);
     },
 
     onLoadFailed: function (error, batchNumber, session) {
@@ -67,23 +69,22 @@ let b = {
         }
     },
 
+    /*
+    Location attachments from Facebook are currently found under entities
+    session.message.entities[ { geo: 
+     { elevation: 0,
+       latitude: 19.05646514892578,
+       longitude: 72.90384674072266,
+       type: 'GeoCoordinates' },
+    type: 'Place' } ]
+    
+    */
     handlePlatformSpecificEntities: function (userId, session) {
         //Get the channel such as facebook, skype, slack etc
         let channelId = session.message.address.channelId
         //Get the entities sent by the user if any
         let entities = session.message.entities;
         if (channelId.toLowerCase() === 'facebook') {
-            /*
-            Location attachments from Facebook are currently found under entities
-            session.message.entities[ { geo: 
-             { elevation: 0,
-               latitude: 19.05646514892578,
-               longitude: 72.90384674072266,
-               type: 'GeoCoordinates' },
-            type: 'Place' } ]
-            
-            */
-            console.log(entities);
             if (entities
                 && entities.length
                 && entities[0]
@@ -104,10 +105,10 @@ let b = {
         let entities = session.message.entities;
         let topic = b.rs.getUservar(userId, 'topic');
         if (topic === 'weather') {
-            weather.handleFacebookGeolocation(b.rs, userId, session, lat, lon)
+            weather.handleUploadedFacebookGeolocation(b.rs, userId, session, lat, lon)
         }
         else {
-            session.send('no topic is going on currently');
+            //what to with location when none of the topics are on
         }
     },
 
