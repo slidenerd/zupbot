@@ -135,6 +135,7 @@ function firstWaterfallStep(session, args, next) {
         }
     }, constants.INTERVAL_FREQUENCY);
 
+    console.log(session.message.sourceEvent);
     //If we dont have a user attached to our session, time to create one
     if (!session.userData.user) {
         // debug('user does not exist ' + session.message.address.channelId);
