@@ -47,7 +47,8 @@ const
     constants = require('./engine/constants'),
     crud = require('./db/crud'),
     debug = require('debug')('server.js'),
-    restify = require('restify');
+    restify = require('restify'),
+    utils = require('./engine/utils');
 
 //=========================================================
 // Bot Setup
@@ -93,6 +94,7 @@ var dialogVersionOptions = {
 };
 bot.use(builder.Middleware.dialogVersion(dialogVersionOptions));
 
+
 //=========================================================
 // Bots Global Actions
 //=========================================================
@@ -103,10 +105,9 @@ bot.use(builder.Middleware.dialogVersion(dialogVersionOptions));
 //=========================================================
 // Bots Dialogs
 //=========================================================
-bot.dialog('/', [firstWaterfallStep, secondWaterfallStep]);
+bot.use(builder.Middleware.firstRun({ version: 1.0, dialogId: '/firstRun' }));
 
-function firstWaterfallStep(session, args, next) {
-
+bot.dialog('/', (session) => {
     console.log(session.message.user.id)
     console.log(session.message.user.name)
     //each time the user chats, mark their last active time.
@@ -116,7 +117,7 @@ function firstWaterfallStep(session, args, next) {
     let timeout = setInterval(() => {
 
         // get the current time when this callback is triggered
-        let currentTime = new Date();
+        let currentTime = new Date(session.message.timestamp);
 
         //Find the difference between the time user last had a conversation with our bot
         //And the time this callback was triggered
@@ -129,30 +130,18 @@ function firstWaterfallStep(session, args, next) {
             //If we have a valid user id at this point, we ll get the user information
             let userId = session.userData.user._id;
             if (userId) {
-                
+
             }
 
             //Remove the interval to avoid triggering it till the next interaction
             clearInterval(timeout);
         }
     }, constants.INTERVAL_FREQUENCY);
-
+    handleWithBrains(session);
     console.log(session.message.sourceEvent);
-    //If we dont have a user attached to our session, time to create one
-    if (!session.userData.user) {
-        // debug('user does not exist ' + session.message.address.channelId);
-        session.beginDialog('/initUser')
-    }
-    else {
-        // debug('user does exist for ' + session.message.address.channelId);
-        next();
-    }
+});
 
-}
-
-function secondWaterfallStep(session, results) {
-
-
+function handleWithBrains(session) {
     //if our rive triggers have not been loaded, load them into memory
     if (!brain.isBrainLoaded()) {
         session.beginDialog('/loadBrain');
@@ -163,28 +152,46 @@ function secondWaterfallStep(session, results) {
     }
 }
 
-bot.dialog('/initUser', initUser);
-
-function initUser(session) {
+//TODO send greeting,  get started button, persistent menu
+bot.dialog('/firstRun', (session) => {
     let userObject = extractUserObject(session);
+    if (utils.isFacebook(session)) {
+
+    }
+    else if (utils.isEmulator(session)) {
+
+    }
+    else if (utils.isSkype(session)) {
+
+    }
     // We dont want a person whose name is null, simple as that
-    if (userObject._id && userObject.userName) {
+    if (userObject._id && userObject.user.name) {
         //Add this object to be tracked across our session
         session.userData.user = userObject;
         //Query to check if this user ID already exists in the mongo db database
         let query = { _id: userObject._id }
         //If the userID exists, modify it, else insert a fresh user object into the database
-        // crud.upsert(query, userObject, (error, document) => {
-        //     if (error) {
-        //         console.error(error);
-        //     }
-        //     else {
-        //         debug('document added ' + document);
-        //     }
-        // })
+        //Dont use the database for emulator requests
+        if (!utils.isEmulator(session)) {
+            crud.upsert(query, userObject, (error, document) => {
+                if (error) {
+                    console.error(error);
+                }
+                else {
+                    debug('document added ' + document);
+                }
+            })
+        }
     }
+    handleWithBrains(session);
     session.endDialog();
-}
+});
+
+bot.dialog('/loadBrain', (session) => {
+    let userId = session.userData.user._id;
+    brain.loadBrain(userId, session);
+    session.endDialog();
+});
 
 function extractUserObject(session) {
     //Create a new user object to be stored in the mongo db database
@@ -195,18 +202,19 @@ function extractUserObject(session) {
     let address = session.message.address;
     return {
         _id: user.id,
-        userName: user.name,
-        botId: address.bot.id,
-        botName: address.bot.name,
+        bot: {
+            id: address.bot.id,
+            name: address.bot.name,
+        },
         channelId: address.channelId,
-        convId: address.conversation.id,
-        convName: address.conversation.name,
-        convIsGroup: address.conversation.isGroup
+        conversation: {
+            id: address.conversation.id,
+            name: address.conversation.name,
+            isGroup: address.conversation.isGroup
+        },
+        user: {
+            id: user.id,
+            name: user.name
+        }
     }
 }
-
-bot.dialog('/loadBrain', (session) => {
-    let userId = session.userData.user._id;
-    brain.loadBrain(userId, session);
-    session.endDialog();
-});
