@@ -1,7 +1,7 @@
 'use strict';
 //The name of the subroutine that can find the weather
 const
-    builder = require('./core/'),
+    builder = require('../core/'),
     locationSubroutine = askLocation.name
 
 function init(rs, userId, session) {
