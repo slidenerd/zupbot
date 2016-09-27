@@ -213,16 +213,16 @@ function extractUserObject(session) {
 }
 
 //reset the whole session
-bot.use(function (session, next) {
-  if (session.message.text === 'poop') {
-    session.perUserInConversationData = {};
-    session.userData = {};
-    session.conversationData = {};
-  }
-  if (!session.userData.firstRun) {
-    session.userData.firstRun = true;
-    session.beginDialog('/firstRun');
-  } else {
-    next();
-  }
-});
+// bot.use(function (session, next) {
+//   if (session.message.text === 'poop') {
+//     session.perUserInConversationData = {};
+//     session.userData = {};
+//     session.conversationData = {};
+//   }
+//   if (!session.userData.firstRun) {
+//     session.userData.firstRun = true;
+//     session.beginDialog('/firstRun');
+//   } else {
+//     next();
+//   }
+// });
