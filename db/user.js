@@ -7,20 +7,13 @@ let collectionUser = 'users';
 // create a schema
 let userSchema = new Schema({
     _id: { type: String, required: true, unique: true },
-    bot: {
-        id: {type: String, required: true},
-        name: {type: String},
-    },
+    botId : {type: String, required: true},
+    botName: {type: String},
     channelId: {type: String, required: true},
-    conversation: {
-        id: {type: String},
-        name: {type: String},
-        isGroup: {type: String}
-    },
-    user: {
-        id: {type: String, required: true},
-        name: {type: String, required: true}
-    }, 
+    convId: {type: String},
+    convName: {type: String},
+    convIsGroup: {type: String},
+    userName: {type: String, required: true},
     email: { type: String },
     lat: { type: Number },
     lon: { type: Number },

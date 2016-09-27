@@ -22,7 +22,7 @@ let crud = {
 //   }
 // })
 
-// crud.remove({ _id: '2c1c7fa3' }, () => {
+// crud.remove({ _id: '1078904948813864' }, () => {
 //   console.log('done')
 // })
 
