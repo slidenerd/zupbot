@@ -105,7 +105,10 @@ bot.use(builder.Middleware.dialogVersion(dialogVersionOptions));
 //=========================================================
 // Bots Dialogs
 //=========================================================
-bot.use(builder.Middleware.firstRun({ version: constants.VERSION, dialogId: '/firstRun', upgradeDialogId: constants.UPGRADE_MESSAGE }));
+bot.use(builder.Middleware.firstRun({
+    version: constants.VERSION,
+    dialogId: '/firstRun'
+}));
 
 bot.dialog('/', (session) => {
     console.log(session.message.user.id)
