@@ -14,7 +14,7 @@ function init(rs, userId, session) {
 }
 
 function askLocation(userId, session) {
-    let replyMessage = new builder.Message(session).text('Can you please share your location?');
+    let replyMessage = new builder.Message(session)
     replyMessage.sourceEvent({
         facebook: {
             recipient: {
