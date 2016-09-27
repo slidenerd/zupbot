@@ -172,13 +172,14 @@ bot.dialog('/firstRun', (session) => {
         let query = { _id: userObject._id }
         //If the userID exists, modify it, else insert a fresh user object into the database
         //Dont use the database for emulator requests
+
         if (!utils.isEmulator(session)) {
             crud.upsert(query, userObject, (error, document) => {
                 if (error) {
-                    console.error(error);
+                    session.send('error while saving your info');
                 }
                 else {
-                    debug('document added ' + document);
+                    session.send('added ya');
                 }
             })
         }
@@ -211,18 +212,3 @@ function extractUserObject(session) {
         userName: user.name
     }
 }
-
-//reset the whole session
-// bot.use(function (session, next) {
-//   if (session.message.text === 'poop') {
-//     session.perUserInConversationData = {};
-//     session.userData = {};
-//     session.conversationData = {};
-//   }
-//   if (!session.userData.firstRun) {
-//     session.userData.firstRun = true;
-//     session.beginDialog('/firstRun');
-//   } else {
-//     next();
-//   }
-// });
