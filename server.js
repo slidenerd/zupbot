@@ -48,6 +48,7 @@ const
     crud = require('./db/crud'),
     debug = require('debug')('server.js'),
     restify = require('restify'),
+    request = require('request'),
     utils = require('./engine/utils');
 
 //=========================================================
