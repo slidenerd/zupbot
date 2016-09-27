@@ -165,7 +165,7 @@ bot.dialog('/firstRun', (session) => {
 
     }
     // We dont want a person whose name is null, simple as that
-    if (userObject._id && userObject.user.name) {
+    if (userObject._id && userObject.userName) {
         //Add this object to be tracked across our session
         session.userData.user = userObject;
         //Query to check if this user ID already exists in the mongo db database
@@ -202,19 +202,27 @@ function extractUserObject(session) {
     let address = session.message.address;
     return {
         _id: user.id,
-        bot: {
-            id: address.bot.id,
-            name: address.bot.name,
-        },
+        botId: address.bot.id,
+        botName: address.bot.name,
         channelId: address.channelId,
-        conversation: {
-            id: address.conversation.id,
-            name: address.conversation.name,
-            isGroup: address.conversation.isGroup
-        },
-        user: {
-            id: user.id,
-            name: user.name
-        }
+        convId: address.conversation.id,
+        convName: address.conversation.name,
+        convIsGroup: address.conversation.isGroup,
+        userName: user.name
     }
 }
+
+//reset the whole session
+bot.use(function (session, next) {
+  if (session.message.text === 'poop') {
+    session.perUserInConversationData = {};
+    session.userData = {};
+    session.conversationData = {};
+  }
+  if (!session.userData.firstRun) {
+    session.userData.firstRun = true;
+    session.beginDialog('/firstRun');
+  } else {
+    next();
+  }
+});
