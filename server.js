@@ -139,14 +139,15 @@ bot.dialog('/', (session) => {
         }
     }, constants.INTERVAL_FREQUENCY);
 
+    
+    // if(!session.userData.user){
+    //     session.beginDialog('/firstRun');
+    // }
+    // else{
+    //     handleWithBrains(session);
+    // }
     session.userData = {};
     session.conversationData = {}
-    if(!session.userData.user){
-        session.beginDialog('/firstRun');
-    }
-    else{
-        handleWithBrains(session);
-    }
 });
 
 function handleWithBrains(session) {
