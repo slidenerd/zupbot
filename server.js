@@ -107,6 +107,8 @@ bot.dialog('/', [firstWaterfallStep, secondWaterfallStep]);
 
 function firstWaterfallStep(session, args, next) {
 
+    console.log(session.message.user.id)
+    console.log(session.message.user.name)
     //each time the user chats, mark their last active time.
     let lastActive = new Date();
 
