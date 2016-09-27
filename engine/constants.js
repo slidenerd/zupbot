@@ -33,7 +33,9 @@ let constants = {
     MESSENGER_CAROUSEL_LIMIT: 15,
     SKYPE_CAROUSEL_LIMIT: 5,
     UNITS_METRIC: 'metric',
-    VAR_FLIPKART_RESULTS_SIZE: 'count'
+    UPGRADE_MESSAGE: 'We just upgraded our service. Find out what we have to offer now by typing \'help\'',
+    VAR_FLIPKART_RESULTS_SIZE: 'count',
+    VERSION = 1.01
 }
 
 module.exports = constants;

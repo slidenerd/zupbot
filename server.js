@@ -89,7 +89,7 @@ server.get('/.*/', restify.serveStatic({
 // Anytime the major version is incremented any existing conversations will be restarted.
 
 var dialogVersionOptions = {
-    version: 1.0,
+    version: constants.VERSION,
     resetCommand: /^reset/i
 };
 bot.use(builder.Middleware.dialogVersion(dialogVersionOptions));
@@ -105,7 +105,7 @@ bot.use(builder.Middleware.dialogVersion(dialogVersionOptions));
 //=========================================================
 // Bots Dialogs
 //=========================================================
-bot.use(builder.Middleware.firstRun({ version: 1.0, dialogId: '/firstRun' }));
+bot.use(builder.Middleware.firstRun({ version: constants.VERSION, dialogId: '/firstRun', upgradeDialogId: constants.UPGRADE_MESSAGE }));
 
 bot.dialog('/', (session) => {
     console.log(session.message.user.id)
