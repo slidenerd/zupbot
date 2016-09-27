@@ -43,7 +43,6 @@ function findWeather(lat, lon) {
 }
 
 function handleUploadedFacebookGeolocation(rs, userId, session, lat, lon) {
-	session.send('ok this was called')
 	findWeather(lat, lon)
 		.then((weatherReport) => {
 			weatherReport.location = 'your place';
