@@ -233,7 +233,7 @@
 // the hello hi stuff starts here
 
 + (hello|hi|hey|howdy|hola|hai|yo) [*]
-- How are you doing. What can I do for you today
+- How are you doing. What can I do for you today. You can simply say 'help' for starters.
 - <star1> how are you doing today?
 
 + i am [*] (great|good|awesome) [*]
