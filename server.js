@@ -154,6 +154,7 @@ function handleWithBrains(session) {
 
 //TODO send greeting,  get started button, persistent menu
 bot.dialog('/firstRun', (session) => {
+    session.send('first run')
     let userObject = extractUserObject(session);
     if (utils.isFacebook(session)) {
 
