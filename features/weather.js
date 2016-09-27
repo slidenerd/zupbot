@@ -52,7 +52,20 @@ function handleFacebookGeolocation(rs, userId, session, lat, lon) {
 			return rs.replyAsync(userId, weatherTrigger, this);
 		})
 		.then((reply) => {
-			session.send(reply);
+			var replyMessage = new builder.Message(session).text(reply);
+			replyMessage.sourceEvent({
+				facebook: {
+					message: {
+						text: "Please share your location:",
+						quick_replies: [
+							{
+								"content_type": "location",
+							}
+						]
+					}
+				}
+			});
+			session.send(replyMessage);
 		})
 		.catch((error) => {
 			console.log(error);
