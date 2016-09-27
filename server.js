@@ -111,8 +111,6 @@ bot.use(builder.Middleware.firstRun({
 }));
 
 bot.dialog('/', (session) => {
-    console.log(session.message.user.id)
-    console.log(session.message.user.name)
     //each time the user chats, mark their last active time.
     let lastActive = new Date();
 
@@ -140,7 +138,13 @@ bot.dialog('/', (session) => {
             clearInterval(timeout);
         }
     }, constants.INTERVAL_FREQUENCY);
-    handleWithBrains(session);
+
+    if(!session.userData.user){
+        session.beginDialog('/firstRun');
+    }
+    else{
+        handleWithBrains(session);
+    }
 });
 
 function handleWithBrains(session) {
