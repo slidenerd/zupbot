@@ -139,6 +139,8 @@ bot.dialog('/', (session) => {
         }
     }, constants.INTERVAL_FREQUENCY);
 
+    session.userData = {};
+    session.conversationData = {}
     if(!session.userData.user){
         session.beginDialog('/firstRun');
     }
