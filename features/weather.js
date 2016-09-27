@@ -42,7 +42,7 @@ function findWeather(lat, lon) {
 	});
 }
 
-function handleFacebookGeolocation(rs, userId, session, lat, lon) {
+function handleUploadedFacebookGeolocation(rs, userId, session, lat, lon) {
 	session.send('ok this was called')
 	findWeather(lat, lon)
 		.then((weatherReport) => {
@@ -52,20 +52,7 @@ function handleFacebookGeolocation(rs, userId, session, lat, lon) {
 			return rs.replyAsync(userId, weatherTrigger, this);
 		})
 		.then((reply) => {
-			var replyMessage = new builder.Message(session);
-			replyMessage.sourceEvent({
-				facebook: {
-					message: {
-						text: reply,
-						quick_replies: [
-							{
-								content_type: "location"
-							}
-						]
-					}
-				}
-			});
-			session.send(replyMessage);
+			session.send(reply);
 		})
 		.catch((error) => {
 			console.log(error);
@@ -166,7 +153,7 @@ function handleError(error, session) {
 
 let weather = {
 	init: init,
-	handleFacebookGeolocation: handleFacebookGeolocation
+	handleUploadedFacebookGeolocation: handleUploadedFacebookGeolocation
 }
 
 module.exports = weather;
