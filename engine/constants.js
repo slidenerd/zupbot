@@ -35,7 +35,7 @@ let constants = {
     UNITS_METRIC: 'metric',
     UPGRADE_MESSAGE: 'We just upgraded our service. Find out what we have to offer now by typing \'help\'',
     VAR_FLIPKART_RESULTS_SIZE: 'count',
-    VERSION: 1.01
+    VERSION: 1.02
 }
 
 module.exports = constants;

@@ -138,7 +138,6 @@ bot.dialog('/', (session) => {
         }
     }, constants.INTERVAL_FREQUENCY);
     handleWithBrains(session);
-    console.log(session.message.sourceEvent);
 });
 
 function handleWithBrains(session) {
