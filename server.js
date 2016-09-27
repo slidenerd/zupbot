@@ -138,14 +138,7 @@ bot.dialog('/', (session) => {
             clearInterval(timeout);
         }
     }, constants.INTERVAL_FREQUENCY);
-
-    
-    if(!session.userData.user){
-        session.beginDialog('/firstRun');
-    }
-    else{
-        handleWithBrains(session);
-    }
+    handleWithBrains(session);
 
 });
 
