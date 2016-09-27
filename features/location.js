@@ -17,14 +17,11 @@ function askLocation(userId, session) {
     let replyMessage = new builder.Message(session)
     replyMessage.sourceEvent({
         facebook: {
-            recipient: {
-                id: session.message.user.id
-            },
-            message: {
-                text: "Please share your location:",
-                quick_replies: [
+            "message": {
+                "text": "Please share your location:",
+                "quick_replies": [
                     {
-                        content_type: "location",
+                        "content_type": "location",
                     }
                 ]
             }
