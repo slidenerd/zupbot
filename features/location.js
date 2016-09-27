@@ -13,24 +13,24 @@ function init(rs, userId, session) {
     });
 }
 
+//TODO quick replies arent being sent, needs a fix
 function askLocation(userId, session) {
-    let replyMessage = new builder.Message(session).text('testing')
-    replyMessage.sourceEvent({
-        facebook: {
-            quick_replies: [{
-                content_type:"text",
-                title:"Red",
-                payload:"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_RED"
-            },            
-            {
-                content_type:"text",
-                title:"Blue",
-                payload:"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_BLUE"
-            }]
-        }
-    });
-    console.log(replyMessage);
-    session.send(replyMessage);
+    // let replyMessage = new builder.Message(session).text('testing')
+    // replyMessage.sourceEvent({
+    //     facebook: {
+    //         quick_replies: [{
+    //             content_type:"text",
+    //             title:"Red",
+    //             payload:"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_RED"
+    //         },            
+    //         {
+    //             content_type:"text",
+    //             title:"Blue",
+    //             payload:"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_BLUE"
+    //         }]
+    //     }
+    // });
+    // session.send(replyMessage);
 }
 
 let location = {
