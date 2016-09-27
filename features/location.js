@@ -27,7 +27,7 @@ function askLocation(userId, session) {
             }
         }
     });
-    console.log(replyMessage);
+    console.log(JSON.stringify(replyMessage));
     session.send(replyMessage);
 }
 
