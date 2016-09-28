@@ -77,7 +77,13 @@ let b = {
                     session.send(reply);
                 }).catch(function (error) {
                     // something went wrong
-                    console.log(error);
+                    if(error && error.ignore){
+                        //things that we want to ignore such as quick replies
+                    }
+                    else{
+                        console.log(error);
+                    }
+                    
                 });
         }
     },

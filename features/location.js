@@ -7,30 +7,23 @@ const
 function init(rs, userId, session) {
     rs.setSubroutine(locationSubroutine, (rs, args) => {
         return new rs.Promise((resolve, reject) => {
-            let replyMessage = askLocation(userId, session);
-            resolve(JSON.stringify(replyMessage));
+            askLocation(userId, session);
+            reject({ignore: true});
         });
     });
 }
 
 //TODO quick replies arent being sent, needs a fix
 function askLocation(userId, session) {
-    let replyMessage = new builder.Message(session).text('testing')
+    let replyMessage = new builder.Message(session).text('can you please share your location?')
     replyMessage.sourceEvent({
         facebook: {
             quick_replies: [{
-                content_type:"text",
-                title:"Red",
-                payload:"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_RED"
-            },            
-            {
-                content_type:"text",
-                title:"Blue",
-                payload:"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_BLUE"
+                content_type:"location"
             }]
         }
     });
-    return replyMessage;
+    session.send(replyMessage);
 }
 
 let location = {
