@@ -106,6 +106,8 @@ bot.use(builder.Middleware.dialogVersion(dialogVersionOptions));
 //=========================================================
 // Bots Dialogs
 //=========================================================
+
+//Run this dialog the very first time for a particular user
 bot.use(builder.Middleware.firstRun({
     version: constants.VERSION,
     dialogId: '/firstRun'
@@ -113,13 +115,13 @@ bot.use(builder.Middleware.firstRun({
 
 bot.dialog('/', (session) => {
     //each time the user chats, mark their last active time.
-    let lastActive = new Date();
+    let lastActive = new Date(session.message.timestamp);
 
     //create a timeout to persist their data after they have been inactive for a while
     let timeout = setInterval(() => {
 
         // get the current time when this callback is triggered
-        let currentTime = new Date(session.message.timestamp);
+        let currentTime = new Date();
 
         //Find the difference between the time user last had a conversation with our bot
         //And the time this callback was triggered
@@ -129,10 +131,10 @@ bot.dialog('/', (session) => {
         //Get all the information discussed with the user and update the database
         if (difference > constants.PERSIST_DATA_AFTER) {
 
-            //If we have a valid user id at this point, we ll get the user information
+            //If we have a valid user id at this point, we ll get the user information and persist it
             let userId = session.userData.user._id;
             if (userId) {
-
+                //TODO persist the information
             }
 
             //Remove the interval to avoid triggering it till the next interaction
@@ -140,6 +142,7 @@ bot.dialog('/', (session) => {
         }
     }, constants.INTERVAL_FREQUENCY);
     // session.beginDialog('/getfacebookprofile');
+    // handle user responses with the AI engine rivescript
     handleWithBrains(session);
 });
 
@@ -148,6 +151,7 @@ function handleWithBrains(session) {
     if (!brain.isBrainLoaded()) {
         session.beginDialog('/loadBrain');
     }
+
     else {
         let userId = session.userData.user._id;
         brain.fetchReply(userId, session);

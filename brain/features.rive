@@ -1,5 +1,5 @@
 ! version = 2.0
-! array weathersynonyms = weather|temperature|forecast|climate
+! array weathersynonyms = weather|temperature|forecast|climate|forcast
 ! array dealsynonyms = coupon|coupons|discount|discounts|offers|deals
 
 + [*] (cab|taxi) [*] {weight=996}
