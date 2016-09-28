@@ -139,7 +139,7 @@ bot.dialog('/', (session) => {
             clearInterval(timeout);
         }
     }, constants.INTERVAL_FREQUENCY);
-    session.beginDialog('/getfacebookprofile');
+    // session.beginDialog('/getfacebookprofile');
     handleWithBrains(session);
 });
 

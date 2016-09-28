@@ -56,8 +56,21 @@ let b = {
         session.send(utils.sendRandomMessage(constants.ERROR_LOADING_BRAIN));
     },
 
+    /*
+    Location attachments from Facebook are currently found under entities
+    session.message.entities[ { geo: 
+     { elevation: 0,
+       latitude: 19.05646514892578,
+       longitude: 72.90384674072266,
+       type: 'GeoCoordinates' },
+    type: 'Place' } ]
+    
+    */
     fetchReply: function (userId, session) {
-        if (!b.handlePlatformSpecificEntities(userId, session)) {
+        if (utils.isFacebook(session) && utils.isFacebookGeolocation(session)) {
+            b.handleFacebookGeolocation(userId, session, entities[0].geo.latitude, entities[0].geo.longitude);
+        }
+        else {
             session.sendTyping();
             b.rs.replyAsync(userId, session.message.text, b.this)
                 .then(function (reply) {
@@ -69,35 +82,6 @@ let b = {
         }
     },
 
-    /*
-    Location attachments from Facebook are currently found under entities
-    session.message.entities[ { geo: 
-     { elevation: 0,
-       latitude: 19.05646514892578,
-       longitude: 72.90384674072266,
-       type: 'GeoCoordinates' },
-    type: 'Place' } ]
-    
-    */
-    handlePlatformSpecificEntities: function (userId, session) {
-        //Get the channel such as facebook, skype, slack etc
-        let channelId = session.message.address.channelId
-        //Get the entities sent by the user if any
-        let entities = session.message.entities;
-        if (channelId.toLowerCase() === 'facebook') {
-            if (entities
-                && entities.length
-                && entities[0]
-                && entities[0].geo
-                && entities[0].geo.latitude
-                && entities[0].geo.longitude
-                && entities[0].type.toLowerCase() === 'place') {
-                b.handleFacebookGeolocation(userId, session, entities[0].geo.latitude, entities[0].geo.longitude);
-                return true;
-            }
-        }
-        return false;
-    },
     handleFacebookGeolocation: function (userId, session, lat, lon) {
         //Get the channel such as facebook, skype, slack etc
         let channelId = session.message.address.channelId

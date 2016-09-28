@@ -17,6 +17,18 @@ let utils = {
         return session.message.address.channelId.toLowerCase() === 'facebook'
     },
 
+    isFacebookGeolocation: function(session){
+        //Get the entities sent by the user if any
+        let entities = session.message.entities;
+        return entities
+                && entities.length
+                && entities[0]
+                && entities[0].geo
+                && entities[0].geo.latitude
+                && entities[0].geo.longitude
+                && entities[0].type.toLowerCase() === 'place'
+    },
+
     isEmulator: function(session){
         return session.message.address.channelId.toLowerCase() === 'emulator'
     },
