@@ -192,44 +192,44 @@ bot.dialog('/firstRun', (session) => {
 });
 
 // Get users profile
-bot.dialog('/getfacebookprofile', 
-    function (session) {
+// bot.dialog('/getfacebookprofile', 
+//     function (session) {
 
-        // Store the returned user page-scoped id (USER_ID) and page id
-        // session.userData.userid = session.message.sourceEvent.sender.id;
-        // session.userData.pageid = session.message.sourceEvent.recipient.id;
+//         // Store the returned user page-scoped id (USER_ID) and page id
+//         // session.userData.userid = session.message.sourceEvent.sender.id;
+//         // session.userData.pageid = session.message.sourceEvent.recipient.id;
 
-        // Let the user know we are 'working'
-        session.sendTyping();
-        // Get the users profile information from FB
+//         // Let the user know we are 'working'
+//         session.sendTyping();
+//         // Get the users profile information from FB
 
-        let accessToken = 'EAAZAJiqhoMfYBAFEM3IxmIV5X0zdr5GlFfD86SoD7kA0ir5ngpSWd4YGEttflmPzu4ypZBxuJreOXbkRWJ6sTHbQN6gnkpYdfTkZAAEhvVwaZCuZAYxBBVHhIecTBCCBmhU65mbLL6XKQUgNg1AqXR4CbgrET2ZAQMwqIZA8jeouAZDZD'
-        request({
-            url: 'https://graph.facebook.com/v2.7/'+ session.userData.userid +'?fields=first_name,last_name,profile_pic,locale,timezone,gender',
-            qs: { access_token: accessToken },
-            method: 'GET'
-        }, function(error, response, body) {
-            if (!error && response.statusCode == 200) {
-                // Parse the JSON returned from FB
-                body = JSON.parse(body);
-                // Save profile to userData
-                session.dialogData.firstname = body.first_name;
-                session.dialogData.lastname = body.last_name;
-                session.dialogData.profilepic = body.profile_pic;
-                session.dialogData.locale = body.locale;
-                session.dialogData.timezone = body.timezone;
-                session.dialogData.gender = body.gender;
-                console.log(session.dialogData);
-                // Return to /getstarted
-                session.endDialogWithResult({ response: session.dialogData });
-            } else {
-                // TODO: Handle errors
-                console.log(error);
-                console.log("Get user profile failed");
-            }
-        });
-    }
-);
+//         let accessToken = 'EAAZAJiqhoMfYBAFEM3IxmIV5X0zdr5GlFfD86SoD7kA0ir5ngpSWd4YGEttflmPzu4ypZBxuJreOXbkRWJ6sTHbQN6gnkpYdfTkZAAEhvVwaZCuZAYxBBVHhIecTBCCBmhU65mbLL6XKQUgNg1AqXR4CbgrET2ZAQMwqIZA8jeouAZDZD'
+//         request({
+//             url: 'https://graph.facebook.com/v2.7/'+ session.userData.userid +'?fields=first_name,last_name,profile_pic,locale,timezone,gender',
+//             qs: { access_token: accessToken },
+//             method: 'GET'
+//         }, function(error, response, body) {
+//             if (!error && response.statusCode == 200) {
+//                 // Parse the JSON returned from FB
+//                 body = JSON.parse(body);
+//                 // Save profile to userData
+//                 session.dialogData.firstname = body.first_name;
+//                 session.dialogData.lastname = body.last_name;
+//                 session.dialogData.profilepic = body.profile_pic;
+//                 session.dialogData.locale = body.locale;
+//                 session.dialogData.timezone = body.timezone;
+//                 session.dialogData.gender = body.gender;
+//                 console.log(session.dialogData);
+//                 // Return to /getstarted
+//                 session.endDialogWithResult({ response: session.dialogData });
+//             } else {
+//                 // TODO: Handle errors
+//                 console.log(error);
+//                 console.log("Get user profile failed");
+//             }
+//         });
+//     }
+// );
 
 bot.dialog('/loadBrain', (session) => {
     let userId = session.userData.user._id;

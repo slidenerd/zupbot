@@ -8,7 +8,7 @@ function init(rs, userId, session) {
     rs.setSubroutine(locationSubroutine, (rs, args) => {
         return new rs.Promise((resolve, reject) => {
             let replyMessage = askLocation(userId, session);
-            resolve(replyMessage);
+            resolve(JSON.stringify(replyMessage));
         });
     });
 }
