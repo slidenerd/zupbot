@@ -156,7 +156,6 @@ function handleWithBrains(session) {
 
 //TODO send greeting,  get started button, persistent menu
 bot.dialog('/firstRun', (session) => {
-    session.send('first run')
     let userObject = extractUserObject(session);
     if (utils.isFacebook(session)) {
 
@@ -179,10 +178,10 @@ bot.dialog('/firstRun', (session) => {
         if (!utils.isEmulator(session)) {
             crud.upsert(query, userObject, (error, document) => {
                 if (error) {
-                    session.send('error while saving your info');
+                    console.log('error while saving your info ' + error);
                 }
                 else {
-                    session.send('added ya');
+                    console.log('added ' + document + ' to the database');
                 }
             })
         }
