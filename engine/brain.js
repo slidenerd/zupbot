@@ -79,6 +79,7 @@ let b = {
                     // something went wrong
                     if(error && error.ignore){
                         //things that we want to ignore such as quick replies
+                        session.sendTyping();
                     }
                     else{
                         console.log(error);
