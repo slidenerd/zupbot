@@ -67,6 +67,8 @@ let b = {
     
     */
     fetchReply: function (userId, session) {
+        //Get the entities sent by the user if any
+        let entities = session.message.entities;
         if (utils.isFacebook(session) && utils.isFacebookGeolocation(session)) {
             b.handleFacebookGeolocation(userId, session, entities[0].geo.latitude, entities[0].geo.longitude);
         }
