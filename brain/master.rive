@@ -232,6 +232,11 @@
 
 // the hello hi stuff starts here
 
++ [*] good (morning|afternoon|evening|night) [*]
+* <star> == morning =>{random}good <star> to you as well, how are you feeling today?| a very good <star> to you, how are you doing today?{/random}
+* <star> == night => {random}good <star>, sweet dreams| have a good <star>, enjoy your sleep{/random}
+- Good <star> to you as well
+
 + (hello|hi|hey|howdy|hola|hai|yo) [*]
 - How are you doing. What can I do for you today. You can simply say 'help' for starters.
 - <star1> how are you doing today?
